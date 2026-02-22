@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Николай Горбач](https://up.htmlacademy.ru/ecmascript-individual/2/user/1320289).
-* Наставник: `Неизвестно`.
+* Наставник: [Ярослав Шевцов](https://htmlacademy.ru/profile/redx).
 
 ---
 
