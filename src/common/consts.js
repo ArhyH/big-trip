@@ -21,4 +21,23 @@ const SORTS = [
   },
 ];
 
-export { SORTS };
+const FILTERS = [
+  {
+    name: 'everything',
+    checked: true,
+  },
+  {
+    name: 'future',
+    checked: false,
+  },
+  {
+    name: 'present',
+    checked: false,
+  },
+  {
+    name: 'past',
+    checked: false,
+  },
+];
+
+export { SORTS, FILTERS };
