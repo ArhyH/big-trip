@@ -1,19 +1,27 @@
-import { items } from '../mock/items';
 import { render } from '../render';
 import SortPresenter from './sort-presenter';
 import ItemView from '../view/events/item-view';
 import ListView from '../view/events/list-view';
 import FormView from '../view/form/form-view';
 
+const getItemTitle = (type, destination) => {
+  return `${type} ${destination}`.replace(/\b\w/g, (char) =>
+    char.toUpperCase(),
+  );
+};
+
 export default class ContentPresenter {
-  constructor(contentNode) {
+  constructor({ contentNode, itemModel }) {
     this.contentNode = contentNode;
+    this.itemModel = itemModel;
   }
 
   list = new ListView();
   listElement = this.list.getElement();
 
   init() {
+    this.items = [...this.itemModel.getItems()];
+
     this.sortPresenter = new SortPresenter(this.contentNode);
 
     this.sortPresenter.init();
@@ -21,7 +29,8 @@ export default class ContentPresenter {
     render(this.list, this.contentNode);
     render(new FormView(), this.listElement);
 
-    items.forEach((item) => {
+    this.items.forEach((item) => {
+      item.title = getItemTitle(item.type, item.destination);
       render(new ItemView(item), this.listElement);
     });
   }

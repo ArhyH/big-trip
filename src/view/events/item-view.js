@@ -1,8 +1,9 @@
 import BaseComponent from '../../common/base-component';
+import { offersList } from '../../mock/items';
 
-const getOfferTemplate = ({ name, price }) => `
+const getOfferTemplate = ({ title, price }) => `
   <li class="event__offer">
-    <span class="event__offer-title">${name}</span>
+    <span class="event__offer-title">${title}</span>
     &plus;&euro;&nbsp;
     <span class="event__offer-price">${price}</span>
   </li>
@@ -10,8 +11,8 @@ const getOfferTemplate = ({ name, price }) => `
 
 const getContent = ({
   date,
-  icon,
   title,
+  type,
   startTime,
   endTime,
   duration,
@@ -19,7 +20,10 @@ const getContent = ({
   offers,
   isFavorite,
 }) => {
-  const offersTemplate = offers
+  const currentOffers = offersList.find((offer) => offer.type === type);
+
+  const offersTemplate = currentOffers.offers
+    .filter((offer) => offers.includes(offer.id))
     .map((offer) => getOfferTemplate(offer))
     .join('');
 
@@ -31,7 +35,7 @@ const getContent = ({
         <time class="event__date" datetime="2019-03-18">${date}</time>
 
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/${icon}.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
         </div>
 
         <h3 class="event__title">${title}</h3>
