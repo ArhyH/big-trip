@@ -21,7 +21,7 @@ export default class ContentPresenter {
   listElement = this.list.getElement();
 
   init() {
-    const data = this.formModel.getFormDataById();
+    this.data = this.formModel.getFormDataById();
     this.items = [...this.itemModel.getItems()];
 
     this.sortPresenter = new SortPresenter(this.contentNode);
@@ -29,7 +29,7 @@ export default class ContentPresenter {
     this.sortPresenter.init();
 
     render(this.list, this.contentNode);
-    render(new FormView(data), this.listElement);
+    render(new FormView(this.data), this.listElement);
 
     this.items.forEach((item) => {
       item.title = getItemTitle({
