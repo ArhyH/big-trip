@@ -1,6 +1,6 @@
 import BaseComponent from '../../common/base-component';
 
-const getContent = (title, description, cost) => `
+const getContent = ({ title, description, cost }) => `
   <section class="trip-main__trip-info trip-info">
     <div class="trip-info__main">
       <h1 class="trip-info__title">${title}</h1>
@@ -21,6 +21,10 @@ export default class InfoView extends BaseComponent {
   }
 
   getTemplate() {
-    return getContent(this.title, this.description, this.cost);
+    return getContent({
+      title: this.title,
+      description: this.description,
+      cost: this.cost,
+    });
   }
 }

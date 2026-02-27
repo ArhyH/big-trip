@@ -40,4 +40,38 @@ const FILTERS = [
   },
 ];
 
-export { SORTS, FILTERS };
+const POINT_TYPES = [
+  'taxi',
+  'bus',
+  'train',
+  'ship',
+  'drive',
+  'flight',
+  'check-in',
+  'sightseeing',
+  'restaurant',
+];
+
+const TIME = {
+  MS_IN_MIN: 6e4,
+  SEC_IN_MIN: 6e1,
+  HRS_IN_DAY: 24,
+};
+
+const FORMAT_TIME = {
+  MD: 'MMM DD',
+  H: 'HH:mm',
+  FULL: 'MM/DD/YY HH:mm',
+};
+
+const NEW_POINT = {
+  basePrice: 0,
+  dateFrom: new Date().toISOString(),
+  dateTo: new Date().toISOString(),
+  destinations: 0,
+  isFavorite: false,
+  offers: [],
+  type: POINT_TYPES[0],
+};
+
+export { SORTS, FILTERS, POINT_TYPES, TIME, FORMAT_TIME, NEW_POINT };
