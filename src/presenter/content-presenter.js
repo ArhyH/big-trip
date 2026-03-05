@@ -44,11 +44,9 @@ export default class ContentPresenter {
   }
 
   #handleStateChange(state) {
-    const { points, isLoading } = state;
-
     this.#contentNode.innerHTML = '';
 
-    this.#renderContent({ points: points, isLoading: isLoading });
+    this.#renderContent(state);
   }
 
   #renderContent({ points, isLoading }) {
