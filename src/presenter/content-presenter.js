@@ -4,6 +4,7 @@ import FormView from '../view/form-view';
 import SortView from '../view/sort-view';
 import { render, replace } from '../framework/render';
 import { generateSorts } from '../common/sort';
+import { onEscKeydown } from '../common/utils';
 
 export default class ContentPresenter {
   #contentNode = null;
@@ -43,30 +44,28 @@ export default class ContentPresenter {
   }
 
   #renderPoint(point) {
-    let pointConponent = null;
-    let formConponent = null;
+    let pointComponent = null;
+    let formComponent = null;
 
-    const escKeydownHandler = (evt) => {
-      if (evt.key === 'Escape') {
-        evt.preventDefault();
-        this.#closeForm({ pointConponent, formConponent, escKeydownHandler });
+    const escKeydownHandler = (evt) =>
+      onEscKeydown(evt, () => {
+        this.#closeForm({ pointComponent, formComponent, escKeydownHandler });
         document.removeEventListener('keydown', escKeydownHandler);
-      }
-    };
+      });
 
     const offers = this.#pointsModel.getOffersById(point.type, point.offers);
     const destination = this.#pointsModel.getDestinationById(point.destination);
 
-    pointConponent = new ItemView({
+    pointComponent = new ItemView({
       point,
       offers: offers,
       destination: destination,
       onEditClick: () => {
-        this.#openForm({ pointConponent, formConponent, escKeydownHandler });
+        this.#openForm({ pointComponent, formComponent, escKeydownHandler });
       },
     });
 
-    formConponent = new FormView({
+    formComponent = new FormView({
       point: point,
       types: this.#pointsModel.types,
       offers: this.#pointsModel.getOffersByType(point.type),
@@ -74,14 +73,14 @@ export default class ContentPresenter {
       destinations: this.#pointsModel.destinations,
       details: destination,
       onFormSubmit: () => {
-        this.#closeForm({ pointConponent, formConponent, escKeydownHandler });
+        this.#closeForm({ pointComponent, formComponent, escKeydownHandler });
       },
       onFormDecline: () => {
-        this.#closeForm({ pointConponent, formConponent, escKeydownHandler });
+        this.#closeForm({ pointComponent, formComponent, escKeydownHandler });
       },
     });
 
-    render(pointConponent, this.#listElement);
+    render(pointComponent, this.#listElement);
   }
 
   #closeCurrentForm() {
@@ -91,22 +90,22 @@ export default class ContentPresenter {
     }
   }
 
-  #openForm({ formConponent, pointConponent, escKeydownHandler }) {
+  #openForm({ formComponent, pointComponent, escKeydownHandler }) {
     this.#closeCurrentForm();
 
-    replace(formConponent, pointConponent);
+    replace(formComponent, pointComponent);
     document.addEventListener('keydown', escKeydownHandler);
 
     this.#currentOpenForm = {
       close: () => {
-        replace(pointConponent, formConponent);
+        replace(pointComponent, formComponent);
         document.removeEventListener('keydown', escKeydownHandler);
       },
     };
   }
 
-  #closeForm({ pointConponent, formConponent, escKeydownHandler }) {
-    replace(pointConponent, formConponent);
+  #closeForm({ pointComponent, formComponent, escKeydownHandler }) {
+    replace(pointComponent, formComponent);
     document.removeEventListener('keydown', escKeydownHandler);
     this.#currentOpenForm = null;
   }
