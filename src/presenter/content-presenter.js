@@ -11,22 +11,23 @@ import { HintTexts } from '../common/consts';
 export default class ContentPresenter {
   #contentNode = null;
   #pointsModel = null;
-  #points = null;
+  #appState = null;
   #currentOpenForm = null;
-  #sorts = null;
 
   #list = new ListView();
   #listElement = this.#list.element;
 
-  constructor({ contentNode, pointsModel }) {
+  constructor({ contentNode, pointsModel, appState }) {
     this.#contentNode = contentNode;
     this.#pointsModel = pointsModel;
+    this.#appState = appState;
+
+    this.#appState.subscribe((state) => {
+      this.#handleStateChange(state);
+    });
   }
 
   init() {
-    this.#sorts = generateSorts(this.#pointsModel.points);
-    this.#points = [...this.#pointsModel.points];
-
     // Create
     render(
       new FormView({
@@ -39,7 +40,15 @@ export default class ContentPresenter {
       this.#listElement,
     );
 
-    this.#renderContent({ points: this.#points, isLoading: false });
+    this.#handleStateChange(this.#appState.state);
+  }
+
+  #handleStateChange(state) {
+    const { points, isLoading } = state;
+
+    this.#contentNode.innerHTML = '';
+
+    this.#renderContent({ points: points, isLoading: isLoading });
   }
 
   #renderContent({ points, isLoading }) {
@@ -53,7 +62,9 @@ export default class ContentPresenter {
       return;
     }
 
-    render(new SortView(this.#sorts), this.#contentNode);
+    const sorts = generateSorts(this.#pointsModel.points);
+
+    render(new SortView(sorts), this.#contentNode);
     render(this.#list, this.#contentNode);
     points.forEach((point) => this.#renderPoint(point));
   }
