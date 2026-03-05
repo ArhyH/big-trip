@@ -47,4 +47,21 @@ const FilterTypes = {
   PAST: 'past',
 };
 
-export { POINT_TYPES, TIME, FORMAT_TIME, NEW_POINT, SortTypes, FilterTypes };
+const HintTexts = {
+  listEmpty: 'Click New Event to create your first point',
+  pastFilterEmpty: 'There are no past events',
+  presentListEmpty: 'There are no present events',
+  futureListEmpty: 'There are no future events',
+  loading: 'Loading...',
+  dataLoadError: 'Failed to load latest route information',
+};
+
+export {
+  POINT_TYPES,
+  TIME,
+  FORMAT_TIME,
+  NEW_POINT,
+  SortTypes,
+  FilterTypes,
+  HintTexts,
+};

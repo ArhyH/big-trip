@@ -7,7 +7,7 @@ const getContentTemplate = (message) => `
 export default class HintView extends AbstractView {
   #message = null;
 
-  constructor(message) {
+  constructor({ message }) {
     super();
     this.#message = message;
   }

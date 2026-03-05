@@ -5,6 +5,8 @@ import SortView from '../view/sort-view';
 import { render, replace } from '../framework/render';
 import { generateSorts } from '../common/sort';
 import { onEscKeydown } from '../common/utils';
+import HintView from '../view/hint-view';
+import { HintTexts } from '../common/consts';
 
 export default class ContentPresenter {
   #contentNode = null;
@@ -25,9 +27,6 @@ export default class ContentPresenter {
     this.#sorts = generateSorts(this.#pointsModel.points);
     this.#points = [...this.#pointsModel.points];
 
-    render(new SortView(this.#sorts), this.#contentNode);
-    render(this.#list, this.#contentNode);
-
     // Create
     render(
       new FormView({
@@ -40,7 +39,23 @@ export default class ContentPresenter {
       this.#listElement,
     );
 
-    this.#points.forEach((point) => this.#renderPoint(point));
+    this.#renderContent({ points: this.#points, isLoading: false });
+  }
+
+  #renderContent({ points, isLoading }) {
+    if (isLoading) {
+      render(new HintView({ message: HintTexts.loading }), this.#contentNode);
+      return;
+    }
+
+    if (points.length === 0) {
+      render(new HintView({ message: HintTexts.listEmpty }), this.#contentNode);
+      return;
+    }
+
+    render(new SortView(this.#sorts), this.#contentNode);
+    render(this.#list, this.#contentNode);
+    points.forEach((point) => this.#renderPoint(point));
   }
 
   #renderPoint(point) {
