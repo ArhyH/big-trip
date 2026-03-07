@@ -1,4 +1,4 @@
-import ItemView from '../view/item-view';
+import PointView from '../view/point-view';
 import ListView from '../view/list-view';
 import FormView from '../view/form-view';
 import SortView from '../view/sort-view';
@@ -12,15 +12,17 @@ export default class ContentPresenter {
   #contentNode = null;
   #pointsModel = null;
   #appState = null;
+  #pointService = null;
   #currentOpenForm = null;
 
   #list = new ListView();
   #listElement = this.#list.element;
 
-  constructor({ contentNode, pointsModel, appState }) {
+  constructor({ contentNode, pointsModel, appState, pointService }) {
     this.#contentNode = contentNode;
     this.#pointsModel = pointsModel;
     this.#appState = appState;
+    this.#pointService = pointService;
 
     this.#appState.subscribe((state) => {
       this.#handleStateChange(state);
@@ -28,18 +30,6 @@ export default class ContentPresenter {
   }
 
   init() {
-    // Create
-    render(
-      new FormView({
-        point: this.#pointsModel.newPoint,
-        offers: this.#pointsModel.getOffersByType(
-          this.#pointsModel.newPoint.type,
-        ),
-        destinations: this.#pointsModel.destinations,
-      }),
-      this.#listElement,
-    );
-
     this.#handleStateChange(this.#appState.state);
   }
 
@@ -71,31 +61,24 @@ export default class ContentPresenter {
     let pointComponent = null;
     let formComponent = null;
 
+    const pointData = this.#pointService.getPointData(point);
+    const formData = this.#pointService.getFormData(point);
+
     const escKeydownHandler = (evt) =>
       onEscKeydown(evt, () => {
         this.#closeForm({ pointComponent, formComponent, escKeydownHandler });
         document.removeEventListener('keydown', escKeydownHandler);
       });
 
-    const offers = this.#pointsModel.getOffersById(point.type, point.offers);
-    const destination = this.#pointsModel.getDestinationById(point.destination);
-
-    pointComponent = new ItemView({
-      point,
-      offers: offers,
-      destination: destination,
+    pointComponent = new PointView({
+      pointData,
       onEditClick: () => {
         this.#openForm({ pointComponent, formComponent, escKeydownHandler });
       },
     });
 
     formComponent = new FormView({
-      point: point,
-      types: this.#pointsModel.types,
-      offers: this.#pointsModel.getOffersByType(point.type),
-      checkedOffers: offers,
-      destinations: this.#pointsModel.destinations,
-      details: destination,
+      formData,
       onFormSubmit: () => {
         this.#closeForm({ pointComponent, formComponent, escKeydownHandler });
       },

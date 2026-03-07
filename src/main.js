@@ -1,6 +1,7 @@
 import PointsModel from './model/points-model';
 import ContentPresenter from './presenter/content-presenter';
 import HeaderPresenter from './presenter/header-presenter';
+import PointService from './services/point-service';
 import AppState from './state/app-state';
 
 const headerContentNode = document.querySelector('.trip-main');
@@ -17,6 +18,8 @@ pointsModel.init();
 appState.points = pointsModel.points;
 appState.isLoading = false;
 
+const pointService = new PointService(pointsModel);
+
 const headerPresenter = new HeaderPresenter({
   contentNode: headerContentNode,
   pointsModel,
@@ -26,6 +29,7 @@ const contentPresenter = new ContentPresenter({
   contentNode: eventsNode,
   pointsModel,
   appState,
+  pointService,
 });
 
 headerPresenter.init();

@@ -64,14 +64,17 @@ const getContentTemplate = ({ point, offers, destination }) => {
   `;
 };
 
-export default class ItemView extends AbstractView {
+export default class PointView extends AbstractView {
   #point = null;
   #offers = null;
   #destination = null;
   #handleEditClick = null;
 
-  constructor({ point, offers, destination, onEditClick }) {
+  constructor({ pointData, onEditClick }) {
     super();
+
+    const { point, offers, destination } = pointData;
+
     this.#point = point;
     this.#offers = offers;
     this.#destination = destination;
