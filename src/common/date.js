@@ -1,9 +1,6 @@
 import dayjs from 'dayjs';
 import { TIME } from './consts';
 
-const getRandomArrayElement = (array) =>
-  array[Math.floor(Math.random() * array.length)];
-
 const getDateInFormat = (date, format) =>
   date ? dayjs(date).format(format) : '';
 
@@ -21,4 +18,4 @@ const getDiffInTime = (start, end) => {
   return dayjs(diff).format('DD[D] HH[H] MM[M]');
 };
 
-export { getRandomArrayElement, getDateInFormat, getDiffInTime };
+export { getDateInFormat, getDiffInTime };

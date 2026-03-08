@@ -1,86 +1,93 @@
-import ItemView from '../view/item-view';
+import PointView from '../view/point-view';
 import ListView from '../view/list-view';
 import FormView from '../view/form-view';
-import SortView from '../view/sort';
-import { SORTS } from '../common/consts';
+import SortView from '../view/sort-view';
 import { render, replace } from '../framework/render';
+import { generateSorts } from '../common/sort';
+import { onEscKeydown } from '../common/utils';
+import HintView from '../view/hint-view';
+import { HintTexts } from '../common/consts';
 
 export default class ContentPresenter {
   #contentNode = null;
   #pointsModel = null;
-  #points = null;
+  #appState = null;
+  #pointService = null;
   #currentOpenForm = null;
 
   #list = new ListView();
   #listElement = this.#list.element;
 
-  constructor({ contentNode, pointsModel }) {
+  constructor({ contentNode, pointsModel, appState, pointService }) {
     this.#contentNode = contentNode;
     this.#pointsModel = pointsModel;
+    this.#appState = appState;
+    this.#pointService = pointService;
+
+    this.#appState.subscribe((state) => {
+      this.#handleStateChange(state);
+    });
   }
 
   init() {
-    this.#points = [...this.#pointsModel.points];
+    this.#handleStateChange(this.#appState.state);
+  }
 
-    render(new SortView(SORTS), this.#contentNode);
+  #handleStateChange(state) {
+    this.#contentNode.innerHTML = '';
+
+    this.#renderContent(state);
+  }
+
+  #renderContent({ points, isLoading }) {
+    if (isLoading) {
+      render(new HintView({ message: HintTexts.loading }), this.#contentNode);
+      return;
+    }
+
+    if (points.length === 0) {
+      render(new HintView({ message: HintTexts.listEmpty }), this.#contentNode);
+      return;
+    }
+
+    const sorts = generateSorts(this.#pointsModel.points);
+
+    render(new SortView(sorts), this.#contentNode);
     render(this.#list, this.#contentNode);
-
-    // Create
-    render(
-      new FormView({
-        types: this.#pointsModel.types,
-        point: this.#pointsModel.newPoint,
-        offers: this.#pointsModel.getOffersByType(
-          this.#pointsModel.newPoint.type,
-        ),
-        destinations: this.#pointsModel.destinations,
-      }),
-      this.#listElement,
-    );
-
-    this.#points.forEach((point) => this.#renderPoint(point));
+    points.forEach((point) => this.#renderPoint(point));
   }
 
   #renderPoint(point) {
-    let pointConponent = null;
-    let formConponent = null;
+    let pointComponent = null;
+    let formComponent = null;
 
-    const escKeydownHandler = (evt) => {
-      if (evt.key === 'Escape') {
-        evt.preventDefault();
-        this.#closeForm({ pointConponent, formConponent, escKeydownHandler });
+    const pointData = this.#pointService.getPointData(point);
+    const formData = this.#pointService.getFormData(point);
+
+    const escKeydownHandler = (evt) =>
+      onEscKeydown(evt, () => {
+        this.#closeForm({ pointComponent, formComponent, escKeydownHandler });
         document.removeEventListener('keydown', escKeydownHandler);
-      }
-    };
+      });
 
-    const offers = this.#pointsModel.getOffersById(point.type, point.offers);
-    const destination = this.#pointsModel.getDestinationById(point.destination);
-
-    pointConponent = new ItemView({
-      point,
-      offers: offers,
-      destination: destination,
+    pointComponent = new PointView({
+      pointData,
       onEditClick: () => {
-        this.#openForm({ pointConponent, formConponent, escKeydownHandler });
+        this.#openForm({ pointComponent, formComponent, escKeydownHandler });
       },
     });
 
-    formConponent = new FormView({
-      point: point,
-      types: this.#pointsModel.types,
-      offers: this.#pointsModel.getOffersByType(point.type),
-      checkedOffers: offers,
-      destinations: this.#pointsModel.destinations,
-      details: destination,
+    formComponent = new FormView({
+      formData,
       onFormSubmit: () => {
-        this.#closeForm({ pointConponent, formConponent, escKeydownHandler });
+        this.#closeForm({ pointComponent, formComponent, escKeydownHandler });
       },
       onFormDecline: () => {
-        this.#closeForm({ pointConponent, formConponent, escKeydownHandler });
+        this.#closeForm({ pointComponent, formComponent, escKeydownHandler });
       },
     });
 
-    render(pointConponent, this.#listElement);
+    render(pointComponent, this.#listElement);
   }
 
   #closeCurrentForm() {
@@ -90,22 +97,22 @@ export default class ContentPresenter {
     }
   }
 
-  #openForm({ formConponent, pointConponent, escKeydownHandler }) {
+  #openForm({ formComponent, pointComponent, escKeydownHandler }) {
     this.#closeCurrentForm();
 
-    replace(formConponent, pointConponent);
+    replace(formComponent, pointComponent);
     document.addEventListener('keydown', escKeydownHandler);
 
     this.#currentOpenForm = {
       close: () => {
-        replace(pointConponent, formConponent);
+        replace(pointComponent, formComponent);
         document.removeEventListener('keydown', escKeydownHandler);
       },
     };
   }
 
-  #closeForm({ pointConponent, formConponent, escKeydownHandler }) {
-    replace(pointConponent, formConponent);
+  #closeForm({ pointComponent, formComponent, escKeydownHandler }) {
+    replace(pointComponent, formComponent);
     document.removeEventListener('keydown', escKeydownHandler);
     this.#currentOpenForm = null;
   }

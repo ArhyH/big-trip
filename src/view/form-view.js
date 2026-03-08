@@ -1,5 +1,5 @@
-import { FORMAT_TIME } from '../common/consts';
-import { getDateInFormat } from '../common/helpers';
+import { FORMAT_TIME, POINT_TYPES } from '../common/consts';
+import { getDateInFormat } from '../common/date';
 import AbstractView from '../framework/view/abstract-view';
 
 const getEventTypeTemplate = (type, curentType) => {
@@ -73,7 +73,6 @@ const getDestinationInfoTemplate = ({ pictures, description }) => {
 };
 
 const getContentTemplate = ({
-  types,
   point,
   destinations,
   offers,
@@ -83,9 +82,9 @@ const getContentTemplate = ({
   const { type, dateFrom, dateTo, basePrice } = point;
   const { name = '' } = details;
 
-  const typesTemplate = types
-    .map((item) => getEventTypeTemplate(item, point.type))
-    .join('');
+  const typesTemplate = POINT_TYPES.map((item) =>
+    getEventTypeTemplate(item, point.type),
+  ).join('');
 
   const destinationsDemplate = destinations
     .map((destination) => getDestinationTemplate(destination))
@@ -154,7 +153,6 @@ const getContentTemplate = ({
 
 export default class FormView extends AbstractView {
   #destinations = null;
-  #types = null;
   #point = null;
   #offers = null;
   #checkedOffers = null;
@@ -162,23 +160,14 @@ export default class FormView extends AbstractView {
   #handleFormSubmit = null;
   #handleFormDecline = null;
 
-  constructor({
-    types,
-    point,
-    destinations,
-    offers,
-    checkedOffers,
-    details,
-    onFormSubmit,
-    onFormDecline,
-  }) {
+  constructor({ formData, onFormSubmit, onFormDecline }) {
     super();
 
-    this.#destinations = destinations;
-    this.#types = types;
+    const { point, offers, checkedOffers, details, destinations } = formData;
     this.#point = point;
     this.#offers = offers;
     this.#checkedOffers = checkedOffers;
+    this.#destinations = destinations;
     this.#details = details;
     this.#handleFormSubmit = onFormSubmit;
     this.#handleFormDecline = onFormDecline;
@@ -194,7 +183,6 @@ export default class FormView extends AbstractView {
 
   get template() {
     return getContentTemplate({
-      types: this.#types,
       point: this.#point,
       destinations: this.#destinations,
       offers: this.#offers,

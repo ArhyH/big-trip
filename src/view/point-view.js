@@ -1,5 +1,5 @@
 import { FORMAT_TIME } from '../common/consts';
-import { getDateInFormat, getDiffInTime } from '../common/helpers';
+import { getDateInFormat, getDiffInTime } from '../common/date';
 import AbstractView from '../framework/view/abstract-view';
 
 const getOfferTemplate = ({ title, price }) => `
@@ -64,14 +64,17 @@ const getContentTemplate = ({ point, offers, destination }) => {
   `;
 };
 
-export default class ItemView extends AbstractView {
+export default class PointView extends AbstractView {
   #point = null;
   #offers = null;
   #destination = null;
   #handleEditClick = null;
 
-  constructor({ point, offers, destination, onEditClick }) {
+  constructor({ pointData, onEditClick }) {
     super();
+
+    const { point, offers, destination } = pointData;
+
     this.#point = point;
     this.#offers = offers;
     this.#destination = destination;

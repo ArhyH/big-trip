@@ -1,5 +1,5 @@
 import { POINT_TYPES } from '../common/consts';
-import { getRandomArrayElement } from '../common/helpers';
+import { getRandomArrayElement } from '../common/utils';
 
 const offersList = [
   {

@@ -1,15 +1,13 @@
-import { NEW_POINT, POINT_TYPES } from '../common/consts';
+import { NEW_POINT } from '../common/consts';
 import { destinations, items, offersList } from '../mock/data';
 
 export default class PointsModel {
-  #types = [];
   #destinations = [];
   #offers = [];
   #points = [];
   #newPoint = {};
 
   init() {
-    this.#types = POINT_TYPES;
     this.#destinations = destinations;
     this.#offers = offersList;
     this.#points = items;
@@ -22,10 +20,6 @@ export default class PointsModel {
 
   get newPoint() {
     return this.#newPoint;
-  }
-
-  get types() {
-    return this.#types;
   }
 
   get offers() {

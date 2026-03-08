@@ -1,45 +1,3 @@
-const SORTS = [
-  {
-    name: 'day',
-    disabled: false,
-  },
-  {
-    name: 'event',
-    disabled: true,
-  },
-  {
-    name: 'time',
-    disabled: false,
-  },
-  {
-    name: 'price',
-    disabled: false,
-  },
-  {
-    name: 'offers',
-    disabled: true,
-  },
-];
-
-const FILTERS = [
-  {
-    name: 'everything',
-    checked: true,
-  },
-  {
-    name: 'future',
-    checked: false,
-  },
-  {
-    name: 'present',
-    checked: false,
-  },
-  {
-    name: 'past',
-    checked: false,
-  },
-];
-
 const POINT_TYPES = [
   'taxi',
   'bus',
@@ -74,4 +32,36 @@ const NEW_POINT = {
   type: POINT_TYPES[0],
 };
 
-export { SORTS, FILTERS, POINT_TYPES, TIME, FORMAT_TIME, NEW_POINT };
+const SortTypes = {
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFERS: 'offers',
+};
+
+const FilterTypes = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past',
+};
+
+const HintTexts = {
+  listEmpty: 'Click New Event to create your first point',
+  pastFilterEmpty: 'There are no past events',
+  presentListEmpty: 'There are no present events',
+  futureListEmpty: 'There are no future events',
+  loading: 'Loading...',
+  dataLoadError: 'Failed to load latest route information',
+};
+
+export {
+  POINT_TYPES,
+  TIME,
+  FORMAT_TIME,
+  NEW_POINT,
+  SortTypes,
+  FilterTypes,
+  HintTexts,
+};
