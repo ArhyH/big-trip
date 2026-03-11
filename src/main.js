@@ -19,7 +19,6 @@ appState.isLoading = true;
 
 pointsModel.init();
 
-appState.points = pointsModel.points;
 appState.isLoading = false;
 
 const pointService = new PointService(pointsModel);

@@ -42,6 +42,11 @@ export default class PointPresenter {
     remove(prevFormComponent);
   }
 
+  destroy() {
+    remove(this.#pointComponent);
+    remove(this.#formComponent);
+  }
+
   #createComponents() {
     const pointData = this.#pointService.getPointData(this.#point);
     const formData = this.#pointService.getFormData(this.#point);

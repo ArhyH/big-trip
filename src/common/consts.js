@@ -11,9 +11,9 @@ const POINT_TYPES = [
 ];
 
 const TIME = {
-  MS_IN_MIN: 6e4,
-  SEC_IN_MIN: 6e1,
+  MIN_IN_HR: 6e1,
   HRS_IN_DAY: 24,
+  MIN_IN_DAY: 1440,
 };
 
 const FORMAT_TIME = {
