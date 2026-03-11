@@ -5,17 +5,23 @@ const getDateInFormat = (date, format) =>
   date ? dayjs(date).format(format) : '';
 
 const getDiffInTime = (start, end) => {
-  const diff = dayjs(end).diff(start) / TIME.MS_IN_MIN;
+  const diff = dayjs(end).diff(start, 'minute');
 
-  if (diff < TIME.SEC_IN_MIN) {
-    return dayjs(diff).format('mm[M]');
+  const days = Math.floor(diff / TIME.MIN_IN_DAY);
+  const hours = Math.floor((diff % TIME.MIN_IN_DAY) / TIME.MIN_IN_HR);
+  const mins = diff % TIME.MIN_IN_HR;
+
+  const pad = (str) => str.toString().padStart(2, '0');
+
+  if (days > 0) {
+    return `${pad(days)}D ${pad(hours)}H ${pad(mins)}M`;
   }
 
-  if (diff > TIME.SEC_IN_MIN && diff < TIME.SEC_IN_MIN * TIME.HRS_IN_DAY) {
-    return dayjs(diff).format('HH[H] mm[M]');
+  if (hours > 0) {
+    return `${pad(hours)}H ${pad(mins)}M`;
   }
 
-  return dayjs(diff).format('DD[D] HH[H] MM[M]');
+  return `${pad(mins)}M`;
 };
 
 export { getDateInFormat, getDiffInTime };
