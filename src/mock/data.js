@@ -123,8 +123,8 @@ const items = [
   {
     id: 1,
     basePrice: 1100,
-    dateFrom: '2026-02-05T09:30:00.000Z',
-    dateTo: '2026-02-07T18:45:00.000Z',
+    dateFrom: '2026-01-12T08:00:00.000Z',
+    dateTo: '2026-01-12T10:00:00.000Z', // 2 часа
     destination: 1,
     isFavorite: false,
     offers: [1, 2],
@@ -133,8 +133,8 @@ const items = [
   {
     id: 2,
     basePrice: 1100,
-    dateFrom: '2026-02-28T14:20:00.000Z',
-    dateTo: '2026-03-02T10:15:00.000Z',
+    dateFrom: '2026-02-20T14:15:00.000Z',
+    dateTo: '2026-02-21T16:45:00.000Z', // ~1 день 2.5 часа
     destination: 2,
     isFavorite: false,
     offers: [1, 2],
@@ -142,9 +142,9 @@ const items = [
   },
   {
     id: 3,
-    basePrice: 1100,
-    dateFrom: '2026-03-15T08:00:00.000Z',
-    dateTo: '2026-03-17T20:30:00.000Z',
+    basePrice: 900,
+    dateFrom: '2026-04-03T09:00:00.000Z',
+    dateTo: '2026-04-03T11:30:00.000Z', // / 2.5 часа
     destination: 3,
     isFavorite: false,
     offers: [1],
@@ -152,9 +152,9 @@ const items = [
   },
   {
     id: 4,
-    basePrice: 1100,
-    dateFrom: '2026-04-10T11:45:00.000Z',
-    dateTo: '2026-04-12T16:20:00.000Z',
+    basePrice: 1200,
+    dateFrom: '2026-06-18T07:20:00.000Z',
+    dateTo: '2026-06-19T07:20:00.000Z', // 1 день
     destination: 3,
     isFavorite: true,
     offers: [1],
@@ -163,8 +163,8 @@ const items = [
   {
     id: 5,
     basePrice: 1100,
-    dateFrom: '2026-05-20T07:15:00.000Z',
-    dateTo: '2026-05-23T19:50:00.000Z',
+    dateFrom: '2026-10-05T13:40:00.000Z',
+    dateTo: '2026-10-08T18:10:00.000Z', // ~3 дня
     destination: 3,
     isFavorite: true,
     offers: [1],

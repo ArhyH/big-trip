@@ -30,7 +30,7 @@ export default class HeaderPresenter {
 
   #handleStateChange(state) {
     this.#updateAddButton(state);
-    this.#updateHeader(state);
+    this.#updateHeader(this.#pointsModel.points, state);
   }
 
   #renderFilters() {
@@ -66,7 +66,9 @@ export default class HeaderPresenter {
     );
   }
 
-  #updateHeader({ points, isLoading }) {
+  #updateHeader(points, state) {
+    const { isLoading } = state;
+
     if (this.#infoComponent) {
       remove(this.#infoComponent);
       this.#infoComponent = null;

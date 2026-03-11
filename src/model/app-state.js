@@ -5,15 +5,9 @@ export default class AppState {
   #currentFilter = FilterTypes.EVERYTHING;
   #currentSort = SortTypes.DAY;
   #observers = [];
-  #points;
 
   set isLoading(isLoading) {
     this.#isLoading = isLoading;
-    this.#notify(UpdateTypes.FullChange);
-  }
-
-  set points(points) {
-    this.#points = new Map(points.map((point) => [point.id, point]));
     this.#notify(UpdateTypes.FullChange);
   }
 
@@ -31,10 +25,6 @@ export default class AppState {
     return this.#isLoading;
   }
 
-  get points() {
-    return Array.from(this.#points.values());
-  }
-
   get currentFilter() {
     return this.#currentFilter;
   }
@@ -46,7 +36,6 @@ export default class AppState {
   get state() {
     return {
       isLoading: this.#isLoading,
-      points: this.points,
       currentFilter: this.#currentFilter,
       currentSort: this.#currentSort,
     };
@@ -62,10 +51,11 @@ export default class AppState {
     );
   }
 
-  updatePoint(point) {
-    if (this.#points.get(point.id)) {
-      this.#points.set(point.id, point);
-      this.#notify(UpdateTypes.SinglePointUpdate, { pointId: point.id });
-    }
+  notifyPointUpdated(point) {
+    this.#notify(UpdateTypes.SinglePointUpdate, { pointId: point.id });
+  }
+
+  notifyPointsChanged() {
+    this.#notify(UpdateTypes.FullChange);
   }
 }

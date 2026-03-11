@@ -6,7 +6,7 @@ const sort = {
   [SortTypes.EVENT]: null,
   [SortTypes.TIME]: (a, b) =>
     dayjs(b.dateTo).diff(b.dateFrom) - dayjs(a.dateTo).diff(a.dateFrom),
-  [SortTypes.PRICE]: (a, b) => b.price - a.price,
+  [SortTypes.PRICE]: (a, b) => b.basePrice - a.basePrice,
   [SortTypes.OFFERS]: (a, b) => b.offers.length - a.offers.length,
 };
 
@@ -24,14 +24,13 @@ const generateFilters = (points) =>
   Object.entries(filter).map(([filterType, filterPredicate]) => ({
     type: filterType,
     isDisabled: points.filter(filterPredicate).length === 0,
-    // filter: points.filter(filterPredicate),
   }));
 
-const generateSorts = (points) =>
+const generateSorts = (points, currentSort) =>
   Object.entries(sort).map(([sortType]) => ({
     type: sortType,
     isDisabled: points.length < 2,
-    // filter: sortComparator ? [...points].sort(sortComparator) : points,
+    isChecked: sortType === currentSort,
   }));
 
 export { sort, filter, generateFilters, generateSorts };

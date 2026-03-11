@@ -1,10 +1,9 @@
-import ListView from '../view/list-view';
-import SortView from '../view/sort-view';
 import { render } from '../framework/render';
-import { generateSorts } from '../common/sort';
 import { HintTexts, UpdateTypes } from '../common/consts';
+import ListView from '../view/list-view';
 import PointPresenter from './point-presenter';
 import HintView from '../view/hint-view';
+import SortPresenter from './sort-presenter';
 
 export default class ContentPresenter {
   #contentNode = null;
@@ -13,6 +12,7 @@ export default class ContentPresenter {
   #pointService = null;
   #pointManager = null;
   #pointComponents = new Map();
+  #sortedPoints = [];
 
   #list = new ListView();
   #listElement = this.#list.element;
@@ -43,12 +43,14 @@ export default class ContentPresenter {
       return;
     }
 
+    this.#clearPoints();
     this.#contentNode.innerHTML = '';
-
-    this.#renderContent(state);
+    this.#renderContent(this.#pointsModel.points, state);
   }
 
-  #renderContent({ points, isLoading }) {
+  #renderContent(points, state) {
+    const { isLoading } = state;
+
     if (isLoading) {
       this.#renderHint(HintTexts.loading, this.#contentNode);
       return;
@@ -59,19 +61,31 @@ export default class ContentPresenter {
       return;
     }
 
-    this.#pointComponents.clear();
+    this.#renderSorts(points);
+    this.#renderPoints();
+  }
 
-    const sorts = generateSorts(points);
-
-    render(new SortView(sorts), this.#contentNode);
+  #renderPoints() {
     render(this.#list, this.#contentNode);
-    points.forEach((point) => this.#renderPoint(point));
+    this.#sortedPoints.forEach((point) => this.#renderPoint(point));
+  }
+
+  #clearPoints() {
+    this.#pointComponents.forEach((presenter) => presenter.destroy());
+    this.#pointComponents.clear();
+    this.#listElement.innerHTML = '';
   }
 
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       container: this.#listElement,
-      callbacks: this.#createPointCallbacks(point),
+      callbacks: {
+        onFavoriteClick: () => {
+          point.isFavorite = !point.isFavorite;
+          this.#pointsModel.updatePoint(point);
+          this.#appState.notifyPointUpdated(point);
+        },
+      },
       pointService: this.#pointService,
       pointManager: this.#pointManager,
     });
@@ -80,30 +94,36 @@ export default class ContentPresenter {
     this.#pointComponents.set(point.id, pointPresenter);
   }
 
-  #createPointCallbacks(point) {
-    return {
-      onFavoriteClick: () => {
-        point.isFavorite = !point.isFavorite;
-        this.#pointsModel.updatePoint(point);
-        this.#appState.updatePoint(point);
-      },
-    };
-  }
-
   #updatePoint(pointId) {
     const pointPresenter = this.#pointComponents.get(pointId);
-
-    if (!pointPresenter) {
-      return;
-    }
-
     const updatedPoint = this.#pointsModel.getPointById(pointId);
 
-    if (!updatedPoint) {
+    pointPresenter.init(updatedPoint);
+  }
+
+  #renderSorts(points) {
+    const sortPresenter = new SortPresenter({
+      callbacks: {
+        onSortTypeChange: (sortType) => {
+          this.#handleSortTypeChange(sortType);
+        },
+      },
+      container: this.#contentNode,
+    });
+
+    sortPresenter.init(points, this.#appState.currentSort);
+    this.#sortedPoints = sortPresenter.getSortedPoints(
+      points,
+      this.#appState.currentSort,
+    );
+  }
+
+  #handleSortTypeChange(sortType) {
+    if (sortType === this.#appState.currentSort) {
       return;
     }
 
-    pointPresenter.init(updatedPoint);
+    this.#appState.currentSort = sortType;
   }
 
   #renderHint(message, container) {

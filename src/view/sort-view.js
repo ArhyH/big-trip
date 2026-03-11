@@ -25,13 +25,24 @@ const getContentTemplate = (sorts) => {
 
 export default class SortView extends AbstractView {
   #sorts = null;
+  #handleSortTypeChange = null;
 
-  constructor(sorts) {
+  constructor({ sorts, onSortTypeChange }) {
     super();
     this.#sorts = sorts;
+    this.#handleSortTypeChange = onSortTypeChange;
+
+    this.element.addEventListener('click', this.#sortClickHandler);
   }
 
   get template() {
     return getContentTemplate(this.#sorts);
   }
+
+  #sortClickHandler = (evt) => {
+    if (evt.target.tagName === 'LABEL') {
+      evt.preventDefault();
+      this.#handleSortTypeChange(evt.target.dataset.sortType);
+    }
+  };
 }
