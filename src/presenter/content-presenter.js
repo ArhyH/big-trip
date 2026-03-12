@@ -10,22 +10,32 @@ export default class ContentPresenter {
   #pointsModel = null;
   #appState = null;
   #pointService = null;
-  #pointManager = null;
+  #sortService = null;
+  #keyboardManager = null;
+
   #pointComponents = new Map();
   #sortedPoints = [];
+  #currentOpenFormId = null;
 
   #list = new ListView();
   #listElement = this.#list.element;
 
   constructor(data) {
-    const { contentNode, pointsModel, appState, pointService, pointManager } =
-      data;
+    const {
+      contentNode,
+      pointsModel,
+      appState,
+      pointService,
+      sortService,
+      keyboardManager,
+    } = data;
 
     this.#contentNode = contentNode;
     this.#pointsModel = pointsModel;
     this.#appState = appState;
     this.#pointService = pointService;
-    this.#pointManager = pointManager;
+    this.#keyboardManager = keyboardManager;
+    this.#sortService = sortService;
 
     this.#appState.subscribe((state, updateType, restData) => {
       this.#handleStateChange(state, updateType, restData);
@@ -80,14 +90,22 @@ export default class ContentPresenter {
     const pointPresenter = new PointPresenter({
       container: this.#listElement,
       callbacks: {
+        onModeChange: () => {
+          if (this.#currentOpenFormId) {
+            this.#pointComponents.get(this.#currentOpenFormId).resetView();
+          }
+          this.#currentOpenFormId = point.id;
+        },
         onFavoriteClick: () => {
-          point.isFavorite = !point.isFavorite;
-          this.#pointsModel.updatePoint(point);
-          this.#appState.notifyPointUpdated(point);
+          const updatedPoint = this.#pointsModel.toggleFavorite(point);
+
+          if (updatedPoint) {
+            this.#appState.notifyPointUpdated(updatedPoint);
+          }
         },
       },
       pointService: this.#pointService,
-      pointManager: this.#pointManager,
+      keyboardManager: this.#keyboardManager,
     });
 
     pointPresenter.init(point);
@@ -109,9 +127,10 @@ export default class ContentPresenter {
         },
       },
       container: this.#contentNode,
+      sortService: this.#sortService,
     });
 
-    sortPresenter.init(points, this.#appState.currentSort);
+    sortPresenter.init();
     this.#sortedPoints = sortPresenter.getSortedPoints(
       points,
       this.#appState.currentSort,
