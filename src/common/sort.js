@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { FilterTypes, SortTypes } from './consts';
 
-const sort = {
+const SortComparators = {
   [SortTypes.DAY]: null,
   [SortTypes.EVENT]: null,
   [SortTypes.TIME]: (a, b) =>
@@ -10,7 +10,7 @@ const sort = {
   [SortTypes.OFFERS]: (a, b) => b.offers.length - a.offers.length,
 };
 
-const filter = {
+const FilterPredicates = {
   [FilterTypes.EVERYTHING]: () => true,
   [FilterTypes.FUTURE]: (point) => dayjs().isBefore(point.dateFrom, 'D'),
   [FilterTypes.PRESENT]: (point) =>
@@ -20,17 +20,4 @@ const filter = {
   [FilterTypes.PAST]: (point) => dayjs(point.dateTo).isBefore(dayjs(), 'D'),
 };
 
-const generateFilters = (points) =>
-  Object.entries(filter).map(([filterType, filterPredicate]) => ({
-    type: filterType,
-    isDisabled: points.filter(filterPredicate).length === 0,
-  }));
-
-const generateSorts = (points, currentSort) =>
-  Object.entries(sort).map(([sortType]) => ({
-    type: sortType,
-    isDisabled: points.length < 2,
-    isChecked: sortType === currentSort,
-  }));
-
-export { sort, filter, generateFilters, generateSorts };
+export { SortComparators, FilterPredicates };

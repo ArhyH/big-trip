@@ -50,12 +50,6 @@ export default class PointsModel {
     return this.#destinations.find((dest) => dest.id === id);
   }
 
-  updatePoint(point) {
-    if (this.#points.has(point.id)) {
-      this.#points.set(point.id, point);
-    }
-  }
-
   addPoint(point) {
     this.#points.set(point.id, point);
   }
@@ -64,5 +58,39 @@ export default class PointsModel {
     if (this.#points.has(point.id)) {
       this.#points.delete(point.id);
     }
+  }
+
+  updatePoint(point) {
+    if (!this.#points.has(point.id)) {
+      return;
+    }
+
+    this.#points.set(point.id, point);
+  }
+
+  updatePointFields(point, fields) {
+    const current = this.#points.get(point.id);
+
+    if (!current) {
+      return;
+    }
+
+    const updated = { ...current, ...fields };
+    this.#points.set(point.id, updated);
+
+    return updated;
+  }
+
+  toggleFavorite(point) {
+    const current = this.#points.get(point.id);
+
+    if (!current) {
+      return;
+    }
+
+    const updated = { ...current, isFavorite: !current.isFavorite };
+    this.#points.set(point.id, updated);
+
+    return updated;
   }
 }
