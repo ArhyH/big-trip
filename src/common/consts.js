@@ -61,6 +61,11 @@ const UpdateTypes = {
   SinglePointUpdate: 'SINGLE_POINT_UPDATE',
 };
 
+const FormModes = {
+  Update: 'UPDATE',
+  Create: 'CREATE',
+};
+
 export {
   POINT_TYPES,
   TIME,
@@ -70,4 +75,5 @@ export {
   FilterTypes,
   HintTexts,
   UpdateTypes,
+  FormModes,
 };

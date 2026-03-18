@@ -7,7 +7,17 @@ const offersList = [
     offers: [
       {
         id: 1,
-        title: 'Order Uber',
+        title: 'Taxi offer 1',
+        price: 20,
+      },
+      {
+        id: 2,
+        title: 'Taxi offer 2',
+        price: 20,
+      },
+      {
+        id: 3,
+        title: 'Taxi offer 3',
         price: 20,
       },
     ],
@@ -17,7 +27,17 @@ const offersList = [
     offers: [
       {
         id: 1,
-        title: 'Order Uber',
+        title: 'Bus offer 1',
+        price: 20,
+      },
+      {
+        id: 2,
+        title: 'Bus offer 2',
+        price: 20,
+      },
+      {
+        id: 3,
+        title: 'Bus offer 3',
         price: 20,
       },
     ],
@@ -27,7 +47,17 @@ const offersList = [
     offers: [
       {
         id: 1,
-        title: 'Order Uber',
+        title: 'Train offer 1',
+        price: 20,
+      },
+      {
+        id: 2,
+        title: 'Train offer 2',
+        price: 20,
+      },
+      {
+        id: 3,
+        title: 'Train offer 3',
         price: 20,
       },
     ],
@@ -37,7 +67,17 @@ const offersList = [
     offers: [
       {
         id: 1,
-        title: 'Order Uber',
+        title: 'Ship offer 2',
+        price: 20,
+      },
+      {
+        id: 2,
+        title: 'Ship offer 2',
+        price: 20,
+      },
+      {
+        id: 3,
+        title: 'Ship offer 3',
         price: 20,
       },
     ],
@@ -52,8 +92,13 @@ const offersList = [
       },
       {
         id: 2,
-        title: 'Rent a car',
+        title: 'Drive offer 2',
         price: 80,
+      },
+      {
+        id: 3,
+        title: 'Drive offer 3',
+        price: 20,
       },
     ],
   },
@@ -92,7 +137,12 @@ const offersList = [
     offers: [
       {
         id: 1,
-        title: 'Order Uber',
+        title: 'Check-in offer 1',
+        price: 20,
+      },
+      {
+        id: 2,
+        title: 'Check-in offer 2',
         price: 20,
       },
     ],
@@ -102,7 +152,12 @@ const offersList = [
     offers: [
       {
         id: 1,
-        title: 'Order Uber',
+        title: 'Sightseeing offer 1',
+        price: 20,
+      },
+      {
+        id: 2,
+        title: 'Sightseeing-in offer 2',
         price: 20,
       },
     ],
@@ -112,7 +167,17 @@ const offersList = [
     offers: [
       {
         id: 1,
-        title: 'Order Uber',
+        title: 'Restaurant offer 1',
+        price: 20,
+      },
+      {
+        id: 2,
+        title: 'Restaurant offer 2',
+        price: 20,
+      },
+      {
+        id: 3,
+        title: 'Restaurant offer 3',
         price: 20,
       },
     ],
@@ -172,7 +237,7 @@ const items = [
   },
 ];
 
-const destinations = [
+const destinationsMock = [
   {
     id: 1,
     description:
@@ -223,4 +288,4 @@ const destinations = [
   },
 ];
 
-export { items, offersList, destinations };
+export { items, offersList, destinationsMock };
