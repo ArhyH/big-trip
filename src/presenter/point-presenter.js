@@ -70,6 +70,29 @@ export default class PointPresenter {
       onFormDecline: () => {
         this.#closeForm();
       },
+      onTypeChange: (newType) => {
+        const updatedPoint = {
+          ...this.#point,
+          type: newType,
+          offers: [],
+        };
+
+        this.#point = updatedPoint;
+        const newFormData = this.#pointService.getFormData(this.#point);
+        this.#formComponent.updateElement(newFormData);
+      },
+      onOfferSelect: (id) => {
+        const currentOffers = [...this.#point.offers];
+        const hasOffer = currentOffers.includes(id);
+
+        const newOffers = hasOffer
+          ? currentOffers.filter((offer) => offer !== id)
+          : [...currentOffers, id];
+
+        this.#point = { ...this.#point, offers: newOffers };
+        const newFormData = this.#pointService.getFormData(this.#point);
+        this.#formComponent.updateElement(newFormData);
+      },
     };
 
     this.#pointComponent = new PointView({

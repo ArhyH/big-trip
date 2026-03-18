@@ -4,14 +4,19 @@ import { getContentTemplate } from './form-view-template';
 export default class FormView extends AbstractStatefulView {
   #handleFormSubmit = null;
   #handleFormDecline = null;
+  #handleTypeChange = null;
+  #handleOfferSelect = null;
 
   constructor({ formData, callbacks }) {
     super();
 
-    const { onFormSubmit, onFormDecline } = callbacks;
+    const { onFormSubmit, onFormDecline, onTypeChange, onOfferSelect } =
+      callbacks;
 
     this.#handleFormSubmit = onFormSubmit;
     this.#handleFormDecline = onFormDecline;
+    this.#handleTypeChange = onTypeChange;
+    this.#handleOfferSelect = onOfferSelect;
 
     this._setState(this.#parseDataToState(formData));
     this._restoreHandlers();
@@ -25,6 +30,14 @@ export default class FormView extends AbstractStatefulView {
     this.element
       .querySelector('.event__reset-btn')
       .addEventListener('click', this.#declineFormHandler);
+
+    this.element
+      .querySelector('.event__type-group')
+      .addEventListener('click', this.#changeTypeHandler);
+
+    this.element
+      .querySelector('.event__available-offers')
+      .addEventListener('click', this.#selectOfferHandler);
   }
 
   get template() {
@@ -39,6 +52,21 @@ export default class FormView extends AbstractStatefulView {
   #declineFormHandler = (evt) => {
     evt.preventDefault();
     this.#handleFormDecline();
+  };
+
+  #changeTypeHandler = (evt) => {
+    if (evt.target.tagName === 'LABEL') {
+      evt.preventDefault();
+      this.#handleTypeChange(evt.target.control.value);
+    }
+  };
+
+  #selectOfferHandler = (evt) => {
+    const label = evt.target.closest('.event__offer-label');
+    if (label?.control) {
+      evt.preventDefault();
+      this.#handleOfferSelect(label.control.id);
+    }
   };
 
   #parseDataToState(point) {
