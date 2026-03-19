@@ -49,10 +49,6 @@ export default class FormView extends AbstractStatefulView {
     this.element
       .querySelector('#event-destination-1')
       .addEventListener('change', this.#changeDestinationHandler);
-
-    this.element
-      .querySelector('#destination-list-1')
-      .addEventListener('click', this.#changeDestinationHandler);
   }
 
   get template() {
@@ -85,13 +81,6 @@ export default class FormView extends AbstractStatefulView {
   };
 
   #changeDestinationHandler = (evt) => {
-    if (evt.target.tagName === 'OPTION') {
-      evt.preventDefault();
-      this.element.querySelector('#event-destination-1').value =
-        evt.target.value;
-      this.#handleDestinationChange(evt.target.value);
-    }
-
     if (evt.target.tagName === 'INPUT') {
       evt.preventDefault();
       this.#handleDestinationChange(evt.target.value);

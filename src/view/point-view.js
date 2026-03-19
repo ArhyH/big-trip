@@ -30,10 +30,6 @@ export default class PointView extends AbstractStatefulView {
     return getContentTemplate(this._state);
   }
 
-  get id() {
-    return this._state.point.id;
-  }
-
   #editClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleEditClick();
