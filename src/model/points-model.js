@@ -50,6 +50,10 @@ export default class PointsModel {
     return this.#destinations.find((dest) => dest.id === id);
   }
 
+  getDestinationId(name) {
+    return this.#destinations.find((dest) => dest.name === name)?.id;
+  }
+
   hasPoint(point) {
     return this.#points.has(point.id);
   }

@@ -28,8 +28,8 @@ const getTypesBlockTemplate = ({ type }) => `
     </div>
   </div>`;
 
-const getDestinationTemplate = (destination) =>
-  `<option value="${destination}"></option>`;
+const getDestinationTemplate = ({ name }) =>
+  `<option value="${name}"></option>`;
 
 const getDestinationBlockTemplate = (point, destinations, details) => {
   const { type } = point;
@@ -136,8 +136,14 @@ const getCTAButtons = (isUpdateMode) => {
 };
 
 const getContentTemplate = (formData) => {
-  const { point, offers, checkedOffers, details, destinations, mode } =
-    formData;
+  const {
+    point,
+    offers,
+    checkedOffers,
+    details = {},
+    destinations,
+    mode,
+  } = formData;
   const isUpdateMode = mode === FormModes.Update;
 
   return `

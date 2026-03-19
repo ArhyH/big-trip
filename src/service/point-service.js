@@ -30,4 +30,8 @@ export default class PointService {
       mode: this.#getFormMode(point),
     };
   }
+
+  getDestinationIdByName(name) {
+    return this.#pointsModel.getDestinationId(name);
+  }
 }

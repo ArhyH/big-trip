@@ -241,7 +241,7 @@ const destinationsMock = [
   {
     id: 1,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, enim!',
+      'Chamonix Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, enim!',
     name: 'Chamonix',
     pictures: [
       {
@@ -257,15 +257,15 @@ const destinationsMock = [
   {
     id: 2,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, enim!',
+      'Geneva Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, enim!',
     name: 'Geneva',
     pictures: [
       {
-        src: 'img/photos/5.jpg',
+        src: 'img/photos/2.jpg',
         description: 'Lorem ipsum dolor sit.',
       },
       {
-        src: 'img/photos/3.jpg',
+        src: 'img/photos/4.jpg',
         description: 'Lorem ipsum dolor sit.',
       },
     ],
@@ -273,11 +273,11 @@ const destinationsMock = [
   {
     id: 3,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, enim!',
+      'Amsterdam Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, enim!',
     name: 'Amsterdam',
     pictures: [
       {
-        src: 'img/photos/5.jpg',
+        src: 'img/photos/1.jpg',
         description: 'Lorem ipsum dolor sit.',
       },
       {

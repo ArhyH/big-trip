@@ -53,17 +53,54 @@ export default class PointPresenter {
 
   #createComponents() {
     const pointData = this.#pointService.getPointData(this.#point);
-    const formData = this.#pointService.getFormData(this.#point);
+    const pointCallbacks = this.#getPointCallbacks();
 
-    const pointCallbacks = {
+    const formData = this.#pointService.getFormData(this.#point);
+    const formCallbacks = this.#getFormCallbacks();
+
+    this.#pointComponent = new PointView({
+      pointData,
+      callbacks: pointCallbacks,
+    });
+
+    this.#formComponent = new FormView({
+      formData,
+      callbacks: formCallbacks,
+    });
+  }
+
+  #openForm() {
+    replace(this.#formComponent, this.#pointComponent);
+
+    this.#keyboardManager.addEscHandler(this.#pointComponent.id, () => {
+      this.#closeForm();
+    });
+
+    this.#isOpenForm = true;
+  }
+
+  #closeForm() {
+    if (!this.#isOpenForm) {
+      return;
+    }
+
+    replace(this.#pointComponent, this.#formComponent);
+    this.#keyboardManager.removeEscHandler(this.#pointComponent.id);
+    this.#isOpenForm = false;
+  }
+
+  #getPointCallbacks() {
+    return {
       onEditClick: () => {
         this.#callbacks?.onModeChange();
         this.#openForm();
       },
       onFavoriteClick: this.#callbacks.onFavoriteClick,
     };
+  }
 
-    const formCallbacks = {
+  #getFormCallbacks() {
+    return {
       onFormSubmit: () => {
         this.#closeForm();
       },
@@ -93,36 +130,19 @@ export default class PointPresenter {
         const newFormData = this.#pointService.getFormData(this.#point);
         this.#formComponent.updateElement(newFormData);
       },
+      onDestinationChange: (destination) => {
+        const newDestination =
+          this.#pointService.getDestinationIdByName(destination);
+
+        if (destination === undefined) {
+          return;
+        }
+
+        this.#point = { ...this.#point, destination: newDestination };
+        const newFormData = this.#pointService.getFormData(this.#point);
+        this.#formComponent.updateElement(newFormData);
+      },
     };
-
-    this.#pointComponent = new PointView({
-      pointData,
-      callbacks: pointCallbacks,
-    });
-    this.#formComponent = new FormView({
-      formData,
-      callbacks: formCallbacks,
-    });
-  }
-
-  #openForm() {
-    replace(this.#formComponent, this.#pointComponent);
-
-    this.#keyboardManager.addEscHandler(this.#pointComponent.id, () => {
-      this.#closeForm();
-    });
-
-    this.#isOpenForm = true;
-  }
-
-  #closeForm() {
-    if (!this.#isOpenForm) {
-      return;
-    }
-
-    replace(this.#pointComponent, this.#formComponent);
-    this.#keyboardManager.removeEscHandler(this.#pointComponent.id);
-    this.#isOpenForm = false;
   }
 
   resetView() {

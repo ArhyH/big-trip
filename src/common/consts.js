@@ -26,7 +26,7 @@ const NEW_POINT = {
   basePrice: 0,
   dateFrom: new Date().toISOString(),
   dateTo: new Date().toISOString(),
-  destinations: 0,
+  destination: 0,
   isFavorite: false,
   offers: [],
   type: POINT_TYPES[0],
