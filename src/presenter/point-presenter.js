@@ -53,29 +53,16 @@ export default class PointPresenter {
 
   #createComponents() {
     const pointData = this.#pointService.getPointData(this.#point);
+    const pointCallbacks = this.#getPointCallbacks();
+
     const formData = this.#pointService.getFormData(this.#point);
-
-    const pointCallbacks = {
-      onEditClick: () => {
-        this.#callbacks?.onModeChange();
-        this.#openForm();
-      },
-      onFavoriteClick: this.#callbacks.onFavoriteClick,
-    };
-
-    const formCallbacks = {
-      onFormSubmit: () => {
-        this.#closeForm();
-      },
-      onFormDecline: () => {
-        this.#closeForm();
-      },
-    };
+    const formCallbacks = this.#getFormCallbacks();
 
     this.#pointComponent = new PointView({
       pointData,
       callbacks: pointCallbacks,
     });
+
     this.#formComponent = new FormView({
       formData,
       callbacks: formCallbacks,
@@ -100,6 +87,62 @@ export default class PointPresenter {
     replace(this.#pointComponent, this.#formComponent);
     this.#keyboardManager.removeEscHandler(this.#pointComponent.id);
     this.#isOpenForm = false;
+  }
+
+  #getPointCallbacks() {
+    return {
+      onEditClick: () => {
+        this.#callbacks?.onModeChange();
+        this.#openForm();
+      },
+      onFavoriteClick: this.#callbacks.onFavoriteClick,
+    };
+  }
+
+  #getFormCallbacks() {
+    return {
+      onFormSubmit: () => {
+        this.#closeForm();
+      },
+      onFormDecline: () => {
+        this.#closeForm();
+      },
+      onTypeChange: (newType) => {
+        const updatedPoint = {
+          ...this.#point,
+          type: newType,
+          offers: [],
+        };
+
+        this.#point = updatedPoint;
+        const newFormData = this.#pointService.getFormData(this.#point);
+        this.#formComponent.updateElement(newFormData);
+      },
+      onOfferSelect: (id) => {
+        const currentOffers = [...this.#point.offers];
+        const hasOffer = currentOffers.includes(id);
+
+        const newOffers = hasOffer
+          ? currentOffers.filter((offer) => offer !== id)
+          : [...currentOffers, id];
+
+        this.#point = { ...this.#point, offers: newOffers };
+        const newFormData = this.#pointService.getFormData(this.#point);
+        this.#formComponent.updateElement(newFormData);
+      },
+      onDestinationChange: (destination) => {
+        const newDestination =
+          this.#pointService.getDestinationIdByName(destination);
+
+        if (destination === undefined) {
+          return;
+        }
+
+        this.#point = { ...this.#point, destination: newDestination };
+        const newFormData = this.#pointService.getFormData(this.#point);
+        this.#formComponent.updateElement(newFormData);
+      },
+    };
   }
 
   resetView() {

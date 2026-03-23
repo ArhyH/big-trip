@@ -796,6 +796,8 @@ main {
   transition: background-color 0.2s; }
   .event__offer-label:hover {
     background-color: rgba(13, 138, 228, 0.6); }
+  .event__offer-label span {
+    pointer-events: none; }
   .event__offer-label::first-letter {
     text-transform: capitalize; }
 

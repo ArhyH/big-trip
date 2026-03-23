@@ -1,5 +1,5 @@
 import { NEW_POINT } from '../common/consts';
-import { destinations, items, offersList } from '../mock/data';
+import { destinationsMock, items, offersList } from '../mock/data';
 
 export default class PointsModel {
   #destinations = [];
@@ -8,7 +8,7 @@ export default class PointsModel {
   #points;
 
   init() {
-    this.#destinations = destinations;
+    this.#destinations = destinationsMock;
     this.#offers = offersList;
     this.#newPoint = NEW_POINT;
     this.#points = new Map(items.map((item) => [item.id, item]));
@@ -48,6 +48,14 @@ export default class PointsModel {
 
   getDestinationById(id) {
     return this.#destinations.find((dest) => dest.id === id);
+  }
+
+  getDestinationId(name) {
+    return this.#destinations.find((dest) => dest.name === name)?.id;
+  }
+
+  hasPoint(point) {
+    return this.#points.has(point.id);
   }
 
   addPoint(point) {

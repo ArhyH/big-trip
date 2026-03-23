@@ -6,8 +6,18 @@ const offersList = [
     type: 'taxi',
     offers: [
       {
-        id: 1,
-        title: 'Order Uber',
+        id: '1',
+        title: 'Taxi offer 1',
+        price: 20,
+      },
+      {
+        id: '2',
+        title: 'Taxi offer 2',
+        price: 20,
+      },
+      {
+        id: '3',
+        title: 'Taxi offer 3',
         price: 20,
       },
     ],
@@ -16,8 +26,18 @@ const offersList = [
     type: 'bus',
     offers: [
       {
-        id: 1,
-        title: 'Order Uber',
+        id: '1',
+        title: 'Bus offer 1',
+        price: 20,
+      },
+      {
+        id: '2',
+        title: 'Bus offer 2',
+        price: 20,
+      },
+      {
+        id: '3',
+        title: 'Bus offer 3',
         price: 20,
       },
     ],
@@ -26,8 +46,18 @@ const offersList = [
     type: 'train',
     offers: [
       {
-        id: 1,
-        title: 'Order Uber',
+        id: '1',
+        title: 'Train offer 1',
+        price: 20,
+      },
+      {
+        id: '2',
+        title: 'Train offer 2',
+        price: 20,
+      },
+      {
+        id: '3',
+        title: 'Train offer 3',
         price: 20,
       },
     ],
@@ -36,8 +66,18 @@ const offersList = [
     type: 'ship',
     offers: [
       {
-        id: 1,
-        title: 'Order Uber',
+        id: '1',
+        title: 'Ship offer 2',
+        price: 20,
+      },
+      {
+        id: '2',
+        title: 'Ship offer 2',
+        price: 20,
+      },
+      {
+        id: '3',
+        title: 'Ship offer 3',
         price: 20,
       },
     ],
@@ -46,14 +86,19 @@ const offersList = [
     type: 'drive',
     offers: [
       {
-        id: 1,
+        id: '1',
         title: 'Rent a car',
         price: 200,
       },
       {
-        id: 2,
-        title: 'Rent a car',
+        id: '2',
+        title: 'Drive offer 2',
         price: 80,
+      },
+      {
+        id: '3',
+        title: 'Drive offer 3',
+        price: 20,
       },
     ],
   },
@@ -61,27 +106,27 @@ const offersList = [
     type: 'flight',
     offers: [
       {
-        id: 1,
+        id: '1',
         title: 'Add luggage',
         price: 50,
       },
       {
-        id: 2,
+        id: '2',
         title: 'Switch to comfort class',
         price: 100,
       },
       {
-        id: 3,
+        id: '3',
         title: 'Add meal',
         price: 15,
       },
       {
-        id: 4,
+        id: '4',
         title: 'Choose seats',
         price: 5,
       },
       {
-        id: 5,
+        id: '5',
         title: 'Travel by train',
         price: 40,
       },
@@ -91,8 +136,13 @@ const offersList = [
     type: 'check-in',
     offers: [
       {
-        id: 1,
-        title: 'Order Uber',
+        id: '1',
+        title: 'Check-in offer 1',
+        price: 20,
+      },
+      {
+        id: '2',
+        title: 'Check-in offer 2',
         price: 20,
       },
     ],
@@ -101,8 +151,13 @@ const offersList = [
     type: 'sightseeing',
     offers: [
       {
-        id: 1,
-        title: 'Order Uber',
+        id: '1',
+        title: 'Sightseeing offer 1',
+        price: 20,
+      },
+      {
+        id: '2',
+        title: 'Sightseeing-in offer 2',
         price: 20,
       },
     ],
@@ -111,8 +166,18 @@ const offersList = [
     type: 'restaurant',
     offers: [
       {
-        id: 1,
-        title: 'Order Uber',
+        id: '1',
+        title: 'Restaurant offer 1',
+        price: 20,
+      },
+      {
+        id: '2',
+        title: 'Restaurant offer 2',
+        price: 20,
+      },
+      {
+        id: '3',
+        title: 'Restaurant offer 3',
         price: 20,
       },
     ],
@@ -127,7 +192,7 @@ const items = [
     dateTo: '2026-01-12T10:00:00.000Z', // 2 часа
     destination: 1,
     isFavorite: false,
-    offers: [1, 2],
+    offers: ['1', '2'],
     type: POINT_TYPES[5],
   },
   {
@@ -137,7 +202,7 @@ const items = [
     dateTo: '2026-02-21T16:45:00.000Z', // ~1 день 2.5 часа
     destination: 2,
     isFavorite: false,
-    offers: [1, 2],
+    offers: ['1', '2'],
     type: getRandomArrayElement(POINT_TYPES),
   },
   {
@@ -147,7 +212,7 @@ const items = [
     dateTo: '2026-04-03T11:30:00.000Z', // / 2.5 часа
     destination: 3,
     isFavorite: false,
-    offers: [1],
+    offers: ['1'],
     type: getRandomArrayElement(POINT_TYPES),
   },
   {
@@ -157,7 +222,7 @@ const items = [
     dateTo: '2026-06-19T07:20:00.000Z', // 1 день
     destination: 3,
     isFavorite: true,
-    offers: [1],
+    offers: ['1'],
     type: getRandomArrayElement(POINT_TYPES),
   },
   {
@@ -167,16 +232,16 @@ const items = [
     dateTo: '2026-10-08T18:10:00.000Z', // ~3 дня
     destination: 3,
     isFavorite: true,
-    offers: [1],
+    offers: ['1'],
     type: getRandomArrayElement(POINT_TYPES),
   },
 ];
 
-const destinations = [
+const destinationsMock = [
   {
     id: 1,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, enim!',
+      'Chamonix Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, enim!',
     name: 'Chamonix',
     pictures: [
       {
@@ -192,15 +257,15 @@ const destinations = [
   {
     id: 2,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, enim!',
+      'Geneva Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, enim!',
     name: 'Geneva',
     pictures: [
       {
-        src: 'img/photos/5.jpg',
+        src: 'img/photos/2.jpg',
         description: 'Lorem ipsum dolor sit.',
       },
       {
-        src: 'img/photos/3.jpg',
+        src: 'img/photos/4.jpg',
         description: 'Lorem ipsum dolor sit.',
       },
     ],
@@ -208,11 +273,11 @@ const destinations = [
   {
     id: 3,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, enim!',
+      'Amsterdam Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, enim!',
     name: 'Amsterdam',
     pictures: [
       {
-        src: 'img/photos/5.jpg',
+        src: 'img/photos/1.jpg',
         description: 'Lorem ipsum dolor sit.',
       },
       {
@@ -223,4 +288,4 @@ const destinations = [
   },
 ];
 
-export { items, offersList, destinations };
+export { items, offersList, destinationsMock };

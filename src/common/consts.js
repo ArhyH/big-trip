@@ -26,7 +26,7 @@ const NEW_POINT = {
   basePrice: 0,
   dateFrom: new Date().toISOString(),
   dateTo: new Date().toISOString(),
-  destinations: 0,
+  destination: 0,
   isFavorite: false,
   offers: [],
   type: POINT_TYPES[0],
@@ -61,6 +61,11 @@ const UpdateTypes = {
   SinglePointUpdate: 'SINGLE_POINT_UPDATE',
 };
 
+const FormModes = {
+  Update: 'UPDATE',
+  Create: 'CREATE',
+};
+
 export {
   POINT_TYPES,
   TIME,
@@ -70,4 +75,5 @@ export {
   FilterTypes,
   HintTexts,
   UpdateTypes,
+  FormModes,
 };
