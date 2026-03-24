@@ -19,7 +19,7 @@ const TIME = {
 const FORMAT_TIME = {
   MD: 'MMM DD',
   H: 'HH:mm',
-  FULL: 'MM/DD/YY HH:mm',
+  FULL: 'DD/MM/YY HH:mm',
 };
 
 const NEW_POINT = {
@@ -66,6 +66,11 @@ const FormModes = {
   Create: 'CREATE',
 };
 
+const DateTypes = {
+  dateFrom: 'dateFrom',
+  dateTo: 'dateTo',
+};
+
 export {
   POINT_TYPES,
   TIME,
@@ -76,4 +81,5 @@ export {
   HintTexts,
   UpdateTypes,
   FormModes,
+  DateTypes,
 };

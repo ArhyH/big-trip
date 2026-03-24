@@ -16,4 +16,6 @@ const onEscKeydown = (evt, cb) => {
   cb();
 };
 
-export { getRandomArrayElement, onEscKeydown };
+const getArrayFromMap = (map) => Array.from(map.values());
+
+export { getRandomArrayElement, onEscKeydown, getArrayFromMap };

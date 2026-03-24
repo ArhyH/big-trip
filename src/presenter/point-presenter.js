@@ -108,37 +108,23 @@ export default class PointPresenter {
         this.#closeForm();
       },
       onTypeChange: (newType) => {
-        const updatedPoint = {
-          ...this.#point,
-          type: newType,
-          offers: [],
-        };
-
-        this.#point = updatedPoint;
+        this.#point = this.#point.setType(newType);
         const newFormData = this.#pointService.getFormData(this.#point);
         this.#formComponent.updateElement(newFormData);
       },
       onOfferSelect: (id) => {
-        const currentOffers = [...this.#point.offers];
-        const hasOffer = currentOffers.includes(id);
-
-        const newOffers = hasOffer
-          ? currentOffers.filter((offer) => offer !== id)
-          : [...currentOffers, id];
-
-        this.#point = { ...this.#point, offers: newOffers };
+        this.#point = this.#point.toggleOffer(id);
         const newFormData = this.#pointService.getFormData(this.#point);
         this.#formComponent.updateElement(newFormData);
       },
       onDestinationChange: (destination) => {
-        const newDestination =
+        const destinationId =
           this.#pointService.getDestinationIdByName(destination);
 
-        if (destination === undefined) {
+        if (destinationId === undefined) {
           return;
         }
-
-        this.#point = { ...this.#point, destination: newDestination };
+        this.#point = this.#point.setDestination(destinationId);
         const newFormData = this.#pointService.getFormData(this.#point);
         this.#formComponent.updateElement(newFormData);
       },

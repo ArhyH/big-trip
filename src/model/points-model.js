@@ -1,33 +1,33 @@
-import { NEW_POINT } from '../common/consts';
+import PointEntity from './point-entity';
 import { destinationsMock, items, offersList } from '../mock/data';
+import { getArrayFromMap } from '../common/utils';
 
 export default class PointsModel {
-  #destinations = [];
-  #offers = [];
-  #newPoint = {};
-  #points;
+  #destinationsIdByName = new Map();
+  #destinationsById = new Map();
+  #offers = new Map();
+  #points = new Map();
 
   init() {
-    this.#destinations = destinationsMock;
-    this.#offers = offersList;
-    this.#newPoint = NEW_POINT;
-    this.#points = new Map(items.map((item) => [item.id, item]));
+    this.#setDestinations(destinationsMock);
+    this.#setOffers(offersList);
+    this.#setPoints(items);
   }
 
   get points() {
-    return Array.from(this.#points.values());
+    return getArrayFromMap(this.#points);
   }
 
   get newPoint() {
-    return this.#newPoint;
+    return new PointEntity();
   }
 
   get offers() {
-    return this.#offers;
+    return getArrayFromMap(this.#offers);
   }
 
   get destinations() {
-    return this.#destinations;
+    return getArrayFromMap(this.#destinationsById);
   }
 
   getPointById(id) {
@@ -35,23 +35,21 @@ export default class PointsModel {
   }
 
   getOffersByType(type) {
-    return this.#offers.find((offer) => offer.type === type).offers;
+    return this.#offers.get(type) ?? [];
   }
 
   getOffersById(type, targetIds) {
     const offersByType = this.getOffersByType(type);
 
-    return offersByType.filter((offer) =>
-      targetIds.find((id) => offer.id === id),
-    );
+    return offersByType.filter((offer) => targetIds.includes(offer.id));
   }
 
   getDestinationById(id) {
-    return this.#destinations.find((dest) => dest.id === id);
+    return this.#destinationsById.get(id);
   }
 
-  getDestinationId(name) {
-    return this.#destinations.find((dest) => dest.name === name)?.id;
+  getDestinationIdByName(name) {
+    return this.#destinationsIdByName.get(name);
   }
 
   hasPoint(point) {
@@ -59,7 +57,9 @@ export default class PointsModel {
   }
 
   addPoint(point) {
-    this.#points.set(point.id, point);
+    const entity =
+      point instanceof PointEntity ? point : new PointEntity(point);
+    this.#points.set(entity.id, entity);
   }
 
   removePoint(point) {
@@ -69,11 +69,14 @@ export default class PointsModel {
   }
 
   updatePoint(point) {
-    if (!this.#points.has(point.id)) {
+    const entity =
+      point instanceof PointEntity ? point : new PointEntity(point);
+
+    if (!this.#points.has(entity.id)) {
       return;
     }
 
-    this.#points.set(point.id, point);
+    this.#points.set(entity.id, entity);
   }
 
   updatePointFields(point, fields) {
@@ -83,7 +86,7 @@ export default class PointsModel {
       return;
     }
 
-    const updated = { ...current, ...fields };
+    const updated = current.updateData(fields);
     this.#points.set(point.id, updated);
 
     return updated;
@@ -96,9 +99,31 @@ export default class PointsModel {
       return;
     }
 
-    const updated = { ...current, isFavorite: !current.isFavorite };
+    const updated = current.toggleFavorite();
     this.#points.set(point.id, updated);
 
     return updated;
+  }
+
+  #setDestinations(destinations) {
+    this.#destinationsIdByName = new Map(
+      destinations.map((destination) => [destination.name, destination.id]),
+    );
+    this.#destinationsById = new Map(
+      destinations.map((destination) => [destination.id, destination]),
+    );
+  }
+
+  #setOffers(offers) {
+    this.#offers = new Map(offers.map((offer) => [offer.type, offer.offers]));
+  }
+
+  #setPoints(points) {
+    this.#points = new Map(
+      points.map((item) => {
+        const point = new PointEntity(item);
+        return [point.id, point];
+      }),
+    );
   }
 }

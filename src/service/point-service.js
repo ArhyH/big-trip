@@ -14,17 +14,21 @@ export default class PointService {
 
   getPointData(point) {
     return {
-      point,
+      point: point.data,
       offers: this.#pointsModel.getOffersById(point.type, point.offers),
       destination: this.#pointsModel.getDestinationById(point.destination),
     };
   }
 
   getFormData(point) {
+    const allOffers = this.#pointsModel.getOffersByType(point.type);
+
     return {
-      point,
-      offers: this.#pointsModel.getOffersByType(point.type),
-      checkedOffers: this.#pointsModel.getOffersById(point.type, point.offers),
+      point: point.data,
+      offers: allOffers,
+      checkedOffers: allOffers.filter((offer) =>
+        point.offers.includes(offer.id),
+      ),
       destinations: this.#pointsModel.destinations,
       details: this.#pointsModel.getDestinationById(point.destination),
       mode: this.#getFormMode(point),
@@ -32,6 +36,6 @@ export default class PointService {
   }
 
   getDestinationIdByName(name) {
-    return this.#pointsModel.getDestinationId(name);
+    return this.#pointsModel.getDestinationIdByName(name);
   }
 }
