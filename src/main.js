@@ -5,6 +5,7 @@ import PointService from './service/point-service';
 import AppState from './model/app-state';
 import KeyboardManager from './manager/keyboard-manager';
 import SortService from './service/sort-service';
+import { InfoService } from './service/info-service';
 
 const headerContentNode = document.querySelector('.trip-main');
 const eventsNode = document.querySelector('.trip-events');
@@ -22,12 +23,14 @@ appState.isLoading = false;
 
 const pointService = new PointService(pointsModel);
 const sortService = new SortService({ pointsModel, appState });
+const infoService = new InfoService(pointsModel);
 
 const headerPresenter = new HeaderPresenter({
   contentNode: headerContentNode,
   pointsModel,
   appState,
   sortService,
+  infoService,
 });
 const contentPresenter = new ContentPresenter({
   contentNode: eventsNode,

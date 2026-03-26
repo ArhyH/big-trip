@@ -1,9 +1,9 @@
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+
 import { DateTypes } from '../common/consts';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { getContentTemplate } from './form-view-template';
-import flatpickr from 'flatpickr';
-
-import 'flatpickr/dist/flatpickr.min.css';
 
 export default class FormView extends AbstractStatefulView {
   #handleFormSubmit = null;

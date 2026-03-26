@@ -18,6 +18,7 @@ const TIME = {
 
 const FORMAT_TIME = {
   MD: 'MMM DD',
+  DM: 'DD MMM',
   H: 'HH:mm',
   FULL: 'DD/MM/YY HH:mm',
 };
