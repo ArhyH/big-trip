@@ -4,7 +4,7 @@ import HeaderPresenter from './presenter/header-presenter';
 import PointService from './service/point-service';
 import AppState from './model/app-state';
 import KeyboardManager from './manager/keyboard-manager';
-import SortService from './service/sort-service';
+import FilterSortService from './service/filter-sort-service';
 import { InfoService } from './service/info-service';
 
 const headerContentNode = document.querySelector('.trip-main');
@@ -22,14 +22,14 @@ pointsModel.init();
 appState.isLoading = false;
 
 const pointService = new PointService(pointsModel);
-const sortService = new SortService({ pointsModel, appState });
+const filterSortService = new FilterSortService({ pointsModel, appState });
 const infoService = new InfoService(pointsModel);
 
 const headerPresenter = new HeaderPresenter({
   contentNode: headerContentNode,
   pointsModel,
   appState,
-  sortService,
+  filterSortService,
   infoService,
 });
 const contentPresenter = new ContentPresenter({
@@ -37,7 +37,7 @@ const contentPresenter = new ContentPresenter({
   pointsModel,
   appState,
   pointService,
-  sortService,
+  filterSortService,
   keyboardManager,
 });
 

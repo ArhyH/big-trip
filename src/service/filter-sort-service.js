@@ -1,6 +1,6 @@
 import { FilterPredicates, SortComparators } from '../common/sort';
 
-export default class SortService {
+export default class FilterSortService {
   #pointsModel = null;
   #appState = null;
 

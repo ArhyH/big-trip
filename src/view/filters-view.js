@@ -7,7 +7,7 @@ const getFilterTemplate = ({ type, isChecked, isDisabled }) => {
   return `
     <div class="trip-filters__filter">
       <input id="filter-${type}" class="trip-filters__filter-input visually-hidden" type="radio" name="trip-filter" value="${type}" ${checkedState} ${disabledState}>
-      <label class="trip-filters__filter-label" for="filter-${type}">${type}</label>
+      <label class="trip-filters__filter-label" for="filter-${type}" data-filter-type='${type}'>${type}</label>
     </div>
   `;
 };
@@ -28,13 +28,24 @@ const getContentTemplate = (filters) => {
 
 export default class FiltersView extends AbstractView {
   #filters = null;
+  #handlerFilterTypeChange = null;
 
-  constructor({ filters }) {
+  constructor({ filters, onFilterTypeChange }) {
     super();
     this.#filters = filters;
+    this.#handlerFilterTypeChange = onFilterTypeChange;
+
+    this.element.addEventListener('click', this.#filterClickHandler);
   }
 
   get template() {
     return getContentTemplate(this.#filters);
   }
+
+  #filterClickHandler = (evt) => {
+    if (evt.target.tagName === 'LABEL') {
+      evt.preventDefault();
+      this.#handlerFilterTypeChange(evt.target.dataset.filterType);
+    }
+  };
 }

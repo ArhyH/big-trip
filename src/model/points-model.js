@@ -7,6 +7,7 @@ export default class PointsModel {
   #destinationsById = new Map();
   #offers = new Map();
   #points = new Map();
+  #filterPredicate = () => true;
 
   init() {
     this.#setDestinations(destinationsMock);
@@ -16,6 +17,10 @@ export default class PointsModel {
 
   get points() {
     return getArrayFromMap(this.#points);
+  }
+
+  get filteredPoints() {
+    return this.points.filter(this.#filterPredicate);
   }
 
   get newPoint() {
@@ -28,6 +33,10 @@ export default class PointsModel {
 
   get destinations() {
     return getArrayFromMap(this.#destinationsById);
+  }
+
+  setFilterPredicate(predicate) {
+    this.#filterPredicate = predicate;
   }
 
   getPointById(id) {

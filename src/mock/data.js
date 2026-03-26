@@ -235,6 +235,16 @@ const items = [
     offers: ['1'],
     type: getRandomArrayElement(POINT_TYPES),
   },
+  {
+    id: 6,
+    basePrice: 750,
+    dateFrom: '2026-03-24T10:00:00.000Z', // 3 дня назад
+    dateTo: '2026-03-28T18:00:00.000Z', // через 2 дня
+    destination: 1,
+    isFavorite: false,
+    offers: ['1'],
+    type: POINT_TYPES[0],
+  },
 ];
 
 const destinationsMock = [

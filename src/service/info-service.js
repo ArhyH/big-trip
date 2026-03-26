@@ -10,14 +10,14 @@ export class InfoService {
   }
 
   getDestinations() {
-    const destinations = this.#pointsModel.points.map(
+    const destinations = this.#pointsModel.filteredPoints.map(
       (point) => point.destination,
     );
 
     const names = new Map(
       destinations.map((id) => [
         id,
-        this.#pointsModel.getDestinationById(id).name ?? 'Unknown',
+        this.#pointsModel.getDestinationById(id)?.name ?? 'Unknown',
       ]),
     );
 
@@ -27,26 +27,28 @@ export class InfoService {
   }
 
   getDates() {
-    const dates = this.#pointsModel.points.map((point) => point.dateFrom);
+    const dates = this.#pointsModel.filteredPoints.map(
+      (point) => point.dateFrom,
+    );
 
     const minDate = dates.reduce((min, date) => (date < min ? date : min));
     const maxDate = dates.reduce((max, date) => (date > max ? date : max));
 
-    const farmatted = [minDate, maxDate].map((date) =>
+    const formatted = [minDate, maxDate].map((date) =>
       getDateInFormat(date, FORMAT_TIME.DM),
     );
 
-    if (farmatted[0].slice(-3) === farmatted[1].slice(-3)) {
-      farmatted[0] = farmatted[0].slice(0, -3);
+    if (formatted[0].slice(-3) === formatted[1].slice(-3)) {
+      formatted[0] = formatted[0].slice(0, -3);
     }
 
-    const description = farmatted.join(' &mdash; ');
+    const description = formatted.join(' &mdash; ');
 
     return description;
   }
 
   getPrice() {
-    const price = this.#pointsModel.points.reduce(
+    const price = this.#pointsModel.filteredPoints.reduce(
       (total, point) => total + point.basePrice,
       0,
     );

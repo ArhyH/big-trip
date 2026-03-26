@@ -10,7 +10,7 @@ export default class ContentPresenter {
   #pointsModel = null;
   #appState = null;
   #pointService = null;
-  #sortService = null;
+  #filterSortService = null;
   #keyboardManager = null;
 
   #pointComponents = new Map();
@@ -26,7 +26,7 @@ export default class ContentPresenter {
       pointsModel,
       appState,
       pointService,
-      sortService,
+      filterSortService,
       keyboardManager,
     } = data;
 
@@ -35,7 +35,7 @@ export default class ContentPresenter {
     this.#appState = appState;
     this.#pointService = pointService;
     this.#keyboardManager = keyboardManager;
-    this.#sortService = sortService;
+    this.#filterSortService = filterSortService;
 
     this.#appState.subscribe((state, updateType, restData) => {
       this.#handleStateChange(state, updateType, restData);
@@ -55,7 +55,7 @@ export default class ContentPresenter {
 
     this.#clearPoints();
     this.#contentNode.innerHTML = '';
-    this.#renderContent(this.#pointsModel.points, state);
+    this.#renderContent(this.#pointsModel.filteredPoints, state);
   }
 
   #renderContent(points, state) {
@@ -127,7 +127,7 @@ export default class ContentPresenter {
         },
       },
       container: this.#contentNode,
-      sortService: this.#sortService,
+      filterSortService: this.#filterSortService,
     });
 
     sortPresenter.init();

@@ -14,9 +14,10 @@ const FilterPredicates = {
   [FilterTypes.EVERYTHING]: () => true,
   [FilterTypes.FUTURE]: (point) => dayjs().isBefore(point.dateFrom, 'D'),
   [FilterTypes.PRESENT]: (point) =>
-    (dayjs().isBefore(point.dateFrom, 'D') ||
-      dayjs().isSame(point.dateFrom, 'D')) &&
-    (dayjs().isAfter(point.dateTo, 'D') || dayjs().isSame(point.dateTo, 'D')),
+    (dayjs(point.dateFrom).isBefore(dayjs(), 'D') ||
+      dayjs(point.dateFrom).isSame(dayjs(), 'D')) &&
+    (dayjs(point.dateTo).isAfter(dayjs(), 'D') ||
+      dayjs(point.dateTo).isSame(dayjs(), 'D')),
   [FilterTypes.PAST]: (point) => dayjs(point.dateTo).isBefore(dayjs(), 'D'),
 };
 
