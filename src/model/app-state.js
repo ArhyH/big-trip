@@ -4,6 +4,7 @@ export default class AppState {
   #isLoading = true;
   #currentFilter = FilterTypes.EVERYTHING;
   #currentSort = SortTypes.DAY;
+  #currentOpenFormId = null;
   #observers = [];
 
   set isLoading(isLoading) {
@@ -22,6 +23,10 @@ export default class AppState {
     this.#notify(UpdateTypes.FullChange);
   }
 
+  set currentOpenFormId(id) {
+    this.#currentOpenFormId = id;
+  }
+
   get isLoading() {
     return this.#isLoading;
   }
@@ -32,6 +37,10 @@ export default class AppState {
 
   get currentSort() {
     return this.#currentSort;
+  }
+
+  get currentOpenFormId() {
+    return this.#currentOpenFormId;
   }
 
   get state() {

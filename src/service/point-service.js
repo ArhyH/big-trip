@@ -2,10 +2,12 @@ import { FormModes } from '../common/consts';
 
 export default class PointService {
   #pointsModel = null;
+  #appState = null;
   #formCallbacks = null;
 
-  constructor(pointsModel) {
+  constructor({ pointsModel, appState }) {
     this.#pointsModel = pointsModel;
+    this.#appState = appState;
   }
 
   getFormCallbacks({ point, getFormComponent, callbacks }) {
@@ -56,14 +58,10 @@ export default class PointService {
     const createCallbacks = {
       onFormSubmit: () => {
         this.#pointsModel.addPoint(point);
-        callbacks?.onPointAdd();
+        this.#appState.notifyPointsChanged();
         callbacks?.closeForm();
       },
       onFormDecline: () => {
-        callbacks?.onCancel();
-        callbacks?.closeForm();
-      },
-      onFormReset: () => {
         callbacks?.closeForm();
       },
     };
@@ -71,12 +69,13 @@ export default class PointService {
     const updateCallbacks = {
       onFormSubmit: () => {
         this.#pointsModel.updatePoint(point);
-        callbacks?.onPointUpdate();
+        this.#appState.notifyPointsChanged();
         callbacks?.closeForm();
       },
       onFormDecline: (id) => {
         this.#pointsModel.removePoint(id);
-        callbacks?.onDelete();
+        this.#appState.notifyPointsChanged();
+        this.#appState.currentOpenFormId = null;
         callbacks?.closeForm();
       },
     };
@@ -86,6 +85,18 @@ export default class PointService {
     }
 
     return { ...baseCallBacks, ...createCallbacks };
+  }
+
+  getPointCallbacks({ point, onEditClick }) {
+    return {
+      onEditClick,
+      onFavoriteClick: () => {
+        const updated = this.#pointsModel.toggleFavorite(point);
+        if (updated) {
+          this.#appState.notifyPointsChanged(updated);
+        }
+      },
+    };
   }
 
   getPointData(point) {

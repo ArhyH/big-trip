@@ -7,7 +7,7 @@ export default class InfoService {
   #pointsModel = null;
   #appState = null;
 
-  constructor(pointsModel, appState) {
+  constructor({ pointsModel, appState }) {
     this.#pointsModel = pointsModel;
     this.#appState = appState;
   }
@@ -54,10 +54,19 @@ export default class InfoService {
   }
 
   getPrice() {
-    const price = this.#filteredPoints.reduce(
+    const pointsPrice = this.#filteredPoints.reduce(
       (total, point) => total + point.basePrice,
       0,
     );
-    return price;
+
+    const offers = this.#pointsModel.points.flatMap((point) =>
+      this.#pointsModel.getOffersById(point.type, point.offers),
+    );
+
+    const offersPrice = offers.reduce((total, offer) => total + offer.price, 0);
+
+    const totalPrice = pointsPrice + offersPrice;
+
+    return totalPrice;
   }
 }

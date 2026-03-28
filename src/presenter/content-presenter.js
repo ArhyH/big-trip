@@ -16,7 +16,6 @@ export default class ContentPresenter {
 
   #pointComponents = new Map();
   #sortedPoints = [];
-  #currentOpenFormId = null;
   #addPointPresenter = null;
 
   #list = new ListView();
@@ -92,34 +91,24 @@ export default class ContentPresenter {
     this.#pointComponents.forEach((presenter) => presenter.destroy());
     this.#pointComponents.clear();
     this.#listElement.innerHTML = '';
+    this.#addPointPresenter = null;
   }
 
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       container: this.#listElement,
-      callbacks: {
-        onPointUpdate: () => {
-          this.#appState.notifyPointsChanged();
-        },
-        onPointDelete: () => {
-          this.#appState.notifyPointsChanged();
-          this.#currentOpenFormId = null;
-        },
-        onModeChange: () => {
-          if (this.#currentOpenFormId) {
-            this.#pointComponents.get(this.#currentOpenFormId).resetView();
+      callbacks: this.#pointService.getPointCallbacks({
+        point,
+        onEditClick: () => {
+          if (this.#appState.currentOpenFormId) {
+            this.#pointComponents
+              .get(this.#appState.currentOpenFormId)
+              ?.resetView();
           }
-          this.#addPointPresenter?.closeForm();
-          this.#currentOpenFormId = point.id;
+          this.#addPointPresenter?.resetView();
+          this.#appState.currentOpenFormId = point.id;
         },
-        onFavoriteClick: () => {
-          const updatedPoint = this.#pointsModel.toggleFavorite(point);
-
-          if (updatedPoint) {
-            this.#appState.notifyPointUpdated(updatedPoint);
-          }
-        },
-      },
+      }),
       pointService: this.#pointService,
       keyboardManager: this.#keyboardManager,
     });
@@ -170,9 +159,9 @@ export default class ContentPresenter {
   openAddForm() {
     this.#appState.resetFilterAndSort();
 
-    if (this.#currentOpenFormId) {
-      this.#pointComponents.get(this.#currentOpenFormId)?.resetView();
-      this.#currentOpenFormId = null;
+    if (this.#appState.currentOpenFormId) {
+      this.#pointComponents.get(this.#appState.currentOpenFormId)?.resetView();
+      this.#appState.currentOpenFormId = null;
     }
 
     if (!this.#contentNode.contains(this.#listElement)) {
@@ -180,21 +169,13 @@ export default class ContentPresenter {
       render(this.#listElement, this.#contentNode);
     }
 
-    this.#addPointPresenter?.closeForm();
+    this.#addPointPresenter?.resetView();
 
     this.#addPointPresenter = new AddPointPresenter({
       container: this.#listElement,
       pointService: this.#pointService,
       pointsModel: this.#pointsModel,
       keyboardManager: this.#keyboardManager,
-      callbacks: {
-        onPointAdd: () => {
-          this.#appState.notifyPointsChanged();
-        },
-        onCancel: () => {
-          this.#addPointPresenter = null;
-        },
-      },
     });
 
     this.#addPointPresenter.init();

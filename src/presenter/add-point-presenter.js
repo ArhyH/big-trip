@@ -3,23 +3,20 @@ import FormView from '../view/form-view';
 
 export default class AddPointPresenter {
   #container = null;
-  #callbacks = null;
   #pointService = null;
   #pointsModel = null;
-  keyboardManager = null;
+  #keyboardManager = null;
 
   #formComponent = null;
   #point = null;
 
   constructor(data) {
-    const { container, callbacks, pointService, pointsModel, keyboardManager } =
-      data;
+    const { container, pointService, pointsModel, keyboardManager } = data;
 
     this.#container = container;
-    this.#callbacks = callbacks;
     this.#pointService = pointService;
     this.#pointsModel = pointsModel;
-    this.keyboardManager = keyboardManager;
+    this.#keyboardManager = keyboardManager;
   }
 
   init() {
@@ -32,24 +29,26 @@ export default class AddPointPresenter {
         point: this.#point,
         getFormComponent: () => this.#formComponent,
         callbacks: {
-          closeForm: () => this.closeForm(),
-          onPointAdd: () => this.#callbacks?.onPointAdd(),
+          closeForm: () => this.#closeForm(),
         },
       }),
     });
 
     render(this.#formComponent, this.#container, RenderPosition.AFTERBEGIN);
-    this.keyboardManager.addEscHandler('new-point', () => this.closeForm());
+    this.#keyboardManager.addEscHandler('new-point', () => this.#closeForm());
   }
 
-  closeForm() {
+  #closeForm() {
     if (!this.#formComponent) {
       return;
     }
 
     remove(this.#formComponent);
     this.#formComponent = null;
-    this.keyboardManager.removeEscHandler('new-point');
-    this.#callbacks?.onCancel();
+    this.#keyboardManager.removeEscHandler('new-point');
+  }
+
+  resetView() {
+    this.#closeForm();
   }
 }

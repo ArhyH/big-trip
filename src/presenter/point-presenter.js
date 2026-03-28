@@ -53,7 +53,6 @@ export default class PointPresenter {
 
   #createComponents() {
     const pointData = this.#pointService.getPointData(this.#point);
-    const pointCallbacks = this.#getPointCallbacks();
 
     const formData = this.#pointService.getFormData(this.#point);
     const formCallbacks = this.#pointService.getFormCallbacks({
@@ -61,14 +60,18 @@ export default class PointPresenter {
       getFormComponent: () => this.#formComponent,
       callbacks: {
         closeForm: () => this.#closeForm(),
-        onDelete: () => this.#callbacks?.onPointDelete(),
-        onPointUpdate: () => this.#callbacks?.onPointUpdate(),
       },
     });
 
     this.#pointComponent = new PointView({
       pointData,
-      callbacks: pointCallbacks,
+      callbacks: {
+        ...this.#callbacks,
+        onEditClick: () => {
+          this.#callbacks?.onEditClick();
+          this.#openForm();
+        },
+      },
     });
 
     this.#formComponent = new FormView({
@@ -95,16 +98,6 @@ export default class PointPresenter {
     replace(this.#pointComponent, this.#formComponent);
     this.#keyboardManager.removeEscHandler(this.#pointComponent.id);
     this.#isOpenForm = false;
-  }
-
-  #getPointCallbacks() {
-    return {
-      onEditClick: () => {
-        this.#callbacks?.onModeChange();
-        this.#openForm();
-      },
-      onFavoriteClick: this.#callbacks.onFavoriteClick,
-    };
   }
 
   resetView() {

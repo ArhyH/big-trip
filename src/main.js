@@ -21,9 +21,9 @@ pointsModel.init();
 
 appState.isLoading = false;
 
-const pointService = new PointService(pointsModel);
+const pointService = new PointService({ pointsModel, appState });
 const filterSortService = new FilterSortService({ pointsModel, appState });
-const infoService = new InfoService(pointsModel, appState);
+const infoService = new InfoService({ pointsModel, appState });
 
 const contentPresenter = new ContentPresenter({
   contentNode: eventsNode,

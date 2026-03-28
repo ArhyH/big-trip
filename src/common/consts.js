@@ -30,7 +30,7 @@ const NEW_POINT = {
   destination: 0,
   isFavorite: false,
   offers: [],
-  type: POINT_TYPES[0],
+  type: POINT_TYPES[5],
 };
 
 const SortTypes = {
