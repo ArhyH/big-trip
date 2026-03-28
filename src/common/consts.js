@@ -1,14 +1,14 @@
-const POINT_TYPES = [
-  'taxi',
-  'bus',
-  'train',
-  'ship',
-  'drive',
-  'flight',
-  'check-in',
-  'sightseeing',
-  'restaurant',
-];
+const PointTypes = {
+  TAXI: 'taxi',
+  BUS: 'bus',
+  TRAIN: 'train',
+  SHIP: 'ship',
+  DRIVE: 'drive',
+  FLIGHT: 'flight',
+  CHECKIN: 'check-in',
+  SIGHTSEEING: 'sightseeing',
+  RESTAURANT: 'restaurant',
+};
 
 const TIME = {
   MIN_IN_HR: 6e1,
@@ -30,7 +30,7 @@ const NEW_POINT = {
   destination: 0,
   isFavorite: false,
   offers: [],
-  type: POINT_TYPES[5],
+  type: PointTypes.FLIGHT,
 };
 
 const SortTypes = {
@@ -57,6 +57,13 @@ const HintTexts = {
   dataLoadError: 'Failed to load latest route information',
 };
 
+const FilterEmptyHints = {
+  [FilterTypes.FUTURE]: HintTexts.futureListEmpty,
+  [FilterTypes.PRESENT]: HintTexts.presentListEmpty,
+  [FilterTypes.PAST]: HintTexts.pastFilterEmpty,
+  [FilterTypes.EVERYTHING]: HintTexts.listEmpty,
+};
+
 const UpdateTypes = {
   FullChange: 'FULL_CHANGE',
   SinglePointUpdate: 'SINGLE_POINT_UPDATE',
@@ -73,13 +80,14 @@ const DateTypes = {
 };
 
 export {
-  POINT_TYPES,
+  PointTypes,
   TIME,
   FORMAT_TIME,
   NEW_POINT,
   SortTypes,
   FilterTypes,
   HintTexts,
+  FilterEmptyHints,
   UpdateTypes,
   FormModes,
   DateTypes,

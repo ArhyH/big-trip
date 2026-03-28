@@ -1,4 +1,4 @@
-import { FORMAT_TIME, FormModes, POINT_TYPES } from '../common/consts';
+import { FORMAT_TIME, FormModes, PointTypes } from '../common/consts';
 import { getDateInFormat } from '../common/date';
 
 const getEventTypeTemplate = (pointType, type) => {
@@ -11,21 +11,28 @@ const getEventTypeTemplate = (pointType, type) => {
     </div>`;
 };
 
-const getTypesBlockTemplate = ({ type }) => `
-  <div class="event__type-wrapper">
-    <label class="event__type  event__type-btn" for="event-type-toggle-1">
-      <span class="visually-hidden">Choose event type</span>
-      <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
-    </label>
-    <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+const getTypesBlockTemplate = ({ type }) => {
+  const getPointTypes = () =>
+    Object.values(PointTypes)
+      .map((pointType) => getEventTypeTemplate(pointType, type))
+      .join('');
 
-    <div class="event__type-list">
-      <fieldset class="event__type-group">
-        <legend class="visually-hidden">Event type</legend>
-        ${POINT_TYPES.map((pointType) => getEventTypeTemplate(pointType, type)).join('')}
-      </fieldset>
-    </div>
-  </div>`;
+  return `
+    <div class="event__type-wrapper">
+      <label class="event__type  event__type-btn" for="event-type-toggle-1">
+        <span class="visually-hidden">Choose event type</span>
+        <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+      </label>
+      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+
+      <div class="event__type-list">
+        <fieldset class="event__type-group">
+          <legend class="visually-hidden">Event type</legend>
+          ${getPointTypes()}
+        </fieldset>
+      </div>
+    </div>`;
+};
 
 const getDestinationTemplate = ({ name }) =>
   `<option value="${name}"></option>`;

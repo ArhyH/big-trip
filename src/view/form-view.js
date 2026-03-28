@@ -57,7 +57,7 @@ export default class FormView extends AbstractStatefulView {
 
     this.element
       .querySelector('.event__available-offers')
-      .addEventListener('click', this.#selectOfferHandler);
+      ?.addEventListener('click', this.#selectOfferHandler);
 
     this.element
       .querySelector('#event-destination-1')

@@ -1,5 +1,5 @@
 import { render } from '../framework/render';
-import { HintTexts, UpdateTypes } from '../common/consts';
+import { FilterEmptyHints, HintTexts, UpdateTypes } from '../common/consts';
 import ListView from '../view/list-view';
 import PointPresenter from './point-presenter';
 import HintView from '../view/hint-view';
@@ -74,7 +74,7 @@ export default class ContentPresenter {
     }
 
     if (points.length === 0) {
-      this.#renderHint(HintTexts.listEmpty, this.#contentNode);
+      this.#renderEmptyListHint();
       return;
     }
 
@@ -151,11 +151,6 @@ export default class ContentPresenter {
     this.#appState.currentSort = sortType;
   }
 
-  #renderHint(message, container) {
-    container.innerHTML = '';
-    render(new HintView({ message }), container);
-  }
-
   openAddForm() {
     this.#appState.resetFilterAndSort();
 
@@ -166,7 +161,7 @@ export default class ContentPresenter {
 
     if (!this.#contentNode.contains(this.#listElement)) {
       this.#contentNode.innerHTML = '';
-      render(this.#listElement, this.#contentNode);
+      render(this.#list, this.#contentNode);
     }
 
     this.#addPointPresenter?.resetView();
@@ -179,5 +174,15 @@ export default class ContentPresenter {
     });
 
     this.#addPointPresenter.init();
+  }
+
+  #renderHint(message, container) {
+    container.innerHTML = '';
+    render(new HintView({ message }), container);
+  }
+
+  #renderEmptyListHint() {
+    const message = FilterEmptyHints[this.#appState.currentFilter];
+    this.#renderHint(message, this.#contentNode);
   }
 }
