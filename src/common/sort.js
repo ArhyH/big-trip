@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { FilterTypes, SortTypes } from './consts';
+import { FilterTypes, SortTypes } from './app';
 
 const SortComparators = {
   [SortTypes.DAY]: null,

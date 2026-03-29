@@ -1,14 +1,14 @@
-import { FilterTypes, SortTypes, UpdateTypes } from '../common/consts';
+import { AppStates, FilterTypes, SortTypes, UpdateTypes } from '../common/app';
 
 export default class AppState {
-  #isLoading = true;
+  #renderState = AppStates.IsLoading;
   #currentFilter = FilterTypes.EVERYTHING;
   #currentSort = SortTypes.DAY;
   #currentOpenFormId = null;
   #observers = [];
 
-  set isLoading(isLoading) {
-    this.#isLoading = isLoading;
+  set renderState(state) {
+    this.#renderState = state;
     this.#notify(UpdateTypes.FullChange);
   }
 
@@ -27,8 +27,8 @@ export default class AppState {
     this.#currentOpenFormId = id;
   }
 
-  get isLoading() {
-    return this.#isLoading;
+  get renderState() {
+    return this.#renderState;
   }
 
   get currentFilter() {
@@ -45,7 +45,7 @@ export default class AppState {
 
   get state() {
     return {
-      isLoading: this.#isLoading,
+      renderState: this.#renderState,
       currentFilter: this.#currentFilter,
       currentSort: this.#currentSort,
     };

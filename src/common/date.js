@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { TIME } from './consts';
+import { TIME } from './time';
 
 const getDateInFormat = (date, format) =>
   date ? dayjs(date).format(format) : '';

@@ -1,3 +1,4 @@
+import { AppStates } from '../common/app';
 import { FilterPredicates } from '../common/sort';
 import { remove, render, RenderPosition } from '../framework/render';
 import AddPointView from '../view/add-point-view';
@@ -40,7 +41,6 @@ export default class HeaderPresenter {
 
   init() {
     this.#renderFilters();
-    this.#renderAddButton();
     this.#handleStateChange(this.#appState.state);
   }
 
@@ -48,8 +48,8 @@ export default class HeaderPresenter {
     const predicate = FilterPredicates[state.currentFilter];
     this.#pointsModel.setFilterPredicate(predicate);
 
-    this.#updateAddButton(state.isLoading);
-    this.#renderInfo(state.isLoading);
+    this.#renderAddButton(state.renderState);
+    this.#renderInfo(state.renderState);
     this.#filterPresenter?.update();
   }
 
@@ -71,9 +71,13 @@ export default class HeaderPresenter {
     this.#filterPresenter.init();
   }
 
-  #renderAddButton() {
+  #renderAddButton(renderState) {
+    const isDisabled = renderState !== AppStates.IsReady;
+
+    remove(this.#addPointComponent);
+
     this.#addPointComponent = new AddPointView({
-      isLoading: false,
+      isDisabled,
       onClick: this.#handleAddPointClick,
     });
 
@@ -84,28 +88,14 @@ export default class HeaderPresenter {
     );
   }
 
-  #updateAddButton(isLoading) {
-    if (this.#addPointComponent) {
-      remove(this.#addPointComponent);
-    }
-
-    this.#addPointComponent = new AddPointView({
-      isLoading,
-      onClick: this.#handleAddPointClick,
-    });
-
-    render(
-      this.#addPointComponent,
-      this.#contentNode,
-      RenderPosition.BEFOREEND,
-    );
-  }
-
-  #renderInfo(isLoading) {
+  #renderInfo(renderState) {
     this.#infoPresenter?.destroy();
     this.#infoPresenter = null;
 
-    if (this.#pointsModel.filteredPoints.length === 0 || isLoading) {
+    if (
+      this.#pointsModel.filteredPoints.length === 0 ||
+      renderState !== AppStates.IsReady
+    ) {
       return;
     }
 

@@ -1,27 +1,27 @@
 import AbstractView from '../framework/view/abstract-view';
 
-const getButtonTemplate = (isLoading) => {
-  const isDisabled = isLoading ? 'disabled' : '';
+const getButtonTemplate = (isDisabled) => {
+  const disabled = isDisabled ? 'disabled' : '';
 
   return `
-    <button class="trip-main__event-add-btn  btn  btn--big  btn--yellow" type="button" ${isDisabled}>New event</button>
+    <button class="trip-main__event-add-btn  btn  btn--big  btn--yellow" type="button" ${disabled}>New event</button>
   `;
 };
 
 export default class AddPointView extends AbstractView {
-  #isLoading = false;
+  #isDisabled = false;
   #handleClick = null;
 
-  constructor({ isLoading, onClick }) {
+  constructor({ isDisabled, onClick }) {
     super();
-    this.#isLoading = isLoading;
+    this.#isDisabled = isDisabled;
     this.#handleClick = onClick;
 
     this.element.addEventListener('click', this.#clickHandler);
   }
 
   get template() {
-    return getButtonTemplate(this.#isLoading);
+    return getButtonTemplate(this.#isDisabled);
   }
 
   #clickHandler = () => {

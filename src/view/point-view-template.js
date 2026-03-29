@@ -1,11 +1,11 @@
-import { FORMAT_TIME } from '../common/consts';
 import { getDateInFormat, getDiffInTime } from '../common/date';
+import { TimeFormates } from '../common/time';
 
 const getPointInfoTemplate = (point, destination) => {
   const { dateFrom, type } = point;
   const { name = 'Unknown' } = destination;
   return `
-    <time class="event__date" datetime="${dateFrom}">${getDateInFormat(dateFrom, FORMAT_TIME.MD)}</time>
+    <time class="event__date" datetime="${dateFrom}">${getDateInFormat(dateFrom, TimeFormates.MD)}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
     </div>
@@ -23,9 +23,9 @@ const getOfferTemplate = ({ title, price }) => `
 const getScheduleTemplate = ({ dateFrom, dateTo }) => `
   <div class="event__schedule">
     <p class="event__time">
-      <time class="event__start-time" datetime="${dateFrom}">${getDateInFormat(dateFrom, FORMAT_TIME.H)}</time>
+      <time class="event__start-time" datetime="${dateFrom}">${getDateInFormat(dateFrom, TimeFormates.H)}</time>
       &mdash;
-      <time class="event__end-time" datetime="${dateTo}">${getDateInFormat(dateTo, FORMAT_TIME.H)}</time>
+      <time class="event__end-time" datetime="${dateTo}">${getDateInFormat(dateTo, TimeFormates.H)}</time>
     </p>
     <p class="event__duration">${getDiffInTime(dateFrom, dateTo)}</p>
   </div>

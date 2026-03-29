@@ -1,6 +1,6 @@
-import { FORMAT_TIME } from '../common/consts';
 import { getDateInFormat } from '../common/date';
 import { FilterPredicates } from '../common/sort';
+import { TimeFormates } from '../common/time';
 import { getArrayFromMap } from '../common/utils';
 
 export default class InfoService {
@@ -41,7 +41,7 @@ export default class InfoService {
     const maxDate = dates.reduce((max, date) => (date > max ? date : max));
 
     const formatted = [minDate, maxDate].map((date) =>
-      getDateInFormat(date, FORMAT_TIME.DM),
+      getDateInFormat(date, TimeFormates.DM),
     );
 
     if (formatted[0].slice(-3) === formatted[1].slice(-3)) {

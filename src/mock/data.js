@@ -1,4 +1,4 @@
-import { PointTypes } from '../common/consts';
+import { PointTypes } from '../common/point';
 import { getRandomArrayElement } from '../common/utils';
 
 const offersList = [

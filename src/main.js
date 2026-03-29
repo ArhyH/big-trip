@@ -6,6 +6,7 @@ import AppState from './model/app-state';
 import KeyboardManager from './manager/keyboard-manager';
 import FilterSortService from './service/filter-sort-service';
 import InfoService from './service/info-service';
+import { AppStates } from './common/app';
 
 const headerContentNode = document.querySelector('.trip-main');
 const eventsNode = document.querySelector('.trip-events');
@@ -15,11 +16,11 @@ const appState = new AppState();
 
 const keyboardManager = new KeyboardManager();
 
-appState.isLoading = true;
+appState.renderState = AppStates.IsLoading;
 
 pointsModel.init();
 
-appState.isLoading = false;
+appState.renderState = AppStates.IsReady;
 
 const pointService = new PointService({ pointsModel, appState });
 const filterSortService = new FilterSortService({ pointsModel, appState });

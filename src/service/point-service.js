@@ -1,4 +1,4 @@
-import { FormModes } from '../common/consts';
+import { FormModes } from '../common/app';
 
 export default class PointService {
   #pointsModel = null;
@@ -76,6 +76,9 @@ export default class PointService {
         this.#pointsModel.removePoint(id);
         this.#appState.notifyPointsChanged();
         this.#appState.currentOpenFormId = null;
+        callbacks?.closeForm();
+      },
+      onFormClose: () => {
         callbacks?.closeForm();
       },
     };

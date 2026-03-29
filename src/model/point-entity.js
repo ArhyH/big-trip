@@ -1,4 +1,4 @@
-import { NEW_POINT } from '../common/consts';
+import { NEW_POINT } from '../common/point';
 
 export default class PointEntity {
   #dateFrom;

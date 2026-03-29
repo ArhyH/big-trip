@@ -1,5 +1,6 @@
 import { render } from '../framework/render';
-import { FilterEmptyHints, HintTexts, UpdateTypes } from '../common/consts';
+import { AppStates, UpdateTypes } from '../common/app';
+import { AppStateHints, FilterEmptyHints } from '../common/hint';
 import ListView from '../view/list-view';
 import PointPresenter from './point-presenter';
 import HintView from '../view/hint-view';
@@ -66,10 +67,11 @@ export default class ContentPresenter {
   }
 
   #renderContent(points, state) {
-    const { isLoading } = state;
+    const { renderState } = state;
 
-    if (isLoading) {
-      this.#renderHint(HintTexts.loading, this.#contentNode);
+    if (renderState !== AppStates.IsReady) {
+      const message = AppStateHints[renderState];
+      this.#renderHint(message, this.#contentNode);
       return;
     }
 

@@ -1,9 +1,9 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
-import { DateTypes, FormModes } from '../common/consts';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { getContentTemplate } from './form-view-template';
+import { DateTypes, FormModes } from '../common/app';
 
 export default class FormView extends AbstractStatefulView {
   #handleFormSubmit = null;
@@ -13,7 +13,7 @@ export default class FormView extends AbstractStatefulView {
   #handleDestinationChange = null;
   #handleDateChange = null;
   #handlePriceChange = null;
-  #handleFormReset = null;
+  #handleFormClose = null;
   #flatpickrStart = null;
   #flatpickrEnd = null;
 
@@ -28,6 +28,7 @@ export default class FormView extends AbstractStatefulView {
       onDestinationChange,
       onDateChange,
       onPriceChange,
+      onFormClose,
     } = callbacks;
 
     this.#handleFormSubmit = onFormSubmit;
@@ -37,6 +38,7 @@ export default class FormView extends AbstractStatefulView {
     this.#handleDestinationChange = onDestinationChange;
     this.#handleDateChange = onDateChange;
     this.#handlePriceChange = onPriceChange;
+    this.#handleFormClose = onFormClose;
 
     this._setState(this.#parseDataToState(formData));
     this._restoreHandlers();
@@ -66,6 +68,10 @@ export default class FormView extends AbstractStatefulView {
     this.element
       .querySelector('#event-price-1')
       .addEventListener('change', this.#changePriceHandler);
+
+    this.element
+      .querySelector('.event__rollup-btn')
+      ?.addEventListener('click', this.#closeFormHandler);
 
     this.#setFlatpickr();
   }
@@ -97,6 +103,10 @@ export default class FormView extends AbstractStatefulView {
     } else {
       this.#handleFormDecline();
     }
+  };
+
+  #closeFormHandler = () => {
+    this.#handleFormClose();
   };
 
   #changeTypeHandler = (evt) => {
