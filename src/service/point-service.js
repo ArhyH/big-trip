@@ -1,4 +1,5 @@
 import { FormModes } from '../common/config';
+import { getEncodedData } from '../common/utils';
 
 export default class PointService {
   #pointsModel = null;
@@ -38,7 +39,7 @@ export default class PointService {
         getFormComponent().updateElement(this.getFormData(point));
       },
       onDestinationChange: (destination) => {
-        const id = this.getDestinationIdByName(destination);
+        const id = this.getDestinationIdByName(getEncodedData(destination));
 
         if (id === undefined) {
           return;

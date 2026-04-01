@@ -1,3 +1,5 @@
+import he from 'he';
+
 const getRandomArrayElement = (array) =>
   array[Math.floor(Math.random() * array.length)];
 
@@ -18,4 +20,6 @@ const onEscKeydown = (evt, cb) => {
 
 const getArrayFromMap = (map) => Array.from(map.values());
 
-export { getRandomArrayElement, onEscKeydown, getArrayFromMap };
+const getEncodedData = (data) => he.encode(data);
+
+export { getRandomArrayElement, onEscKeydown, getArrayFromMap, getEncodedData };
