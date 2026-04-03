@@ -43,7 +43,7 @@ export default class FiltersView extends AbstractView {
   }
 
   #filterClickHandler = (evt) => {
-    if (evt.target.tagName === 'LABEL') {
+    if (evt.target.tagName === 'LABEL' && !evt.target.control.disabled) {
       evt.preventDefault();
       this.#handlerFilterTypeChange(evt.target.dataset.filterType);
     }

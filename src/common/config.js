@@ -20,6 +20,8 @@ const UpdateTypes = {
 
 const AppStates = {
   IsLoading: 'IS_LOADING',
+  IsSaving: 'IS_SAVING',
+  IsDeleting: 'IS_DELETING',
   IsError: 'IS_ERROR',
   IsReady: 'IS_READY',
 };
@@ -34,4 +36,17 @@ const DateTypes = {
   dateTo: 'dateTo',
 };
 
-export { SortTypes, FilterTypes, UpdateTypes, AppStates, FormModes, DateTypes };
+const ApiSettings = {
+  AUTHORIZATION: 'Basic gq6e9j3erl7TY',
+  URL: 'https://22.objects.htmlacademy.pro/big-trip',
+};
+
+export {
+  SortTypes,
+  FilterTypes,
+  UpdateTypes,
+  AppStates,
+  FormModes,
+  DateTypes,
+  ApiSettings,
+};

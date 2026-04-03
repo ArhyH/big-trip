@@ -6,21 +6,30 @@ import AppState from './model/app-state';
 import KeyboardManager from './manager/keyboard-manager';
 import FilterSortService from './service/filter-sort-service';
 import InfoService from './service/info-service';
-import { AppStates } from './common/config';
+import PointsApiService from './service/points-api-service';
+import AdapterService from './service/adapter-service';
+import { ApiSettings, AppStates } from './common/config';
 
 const headerContentNode = document.querySelector('.trip-main');
 const eventsNode = document.querySelector('.trip-events');
 
-const pointsModel = new PointsModel();
+const apiService = new PointsApiService({
+  endPoint: ApiSettings.URL,
+  authorization: ApiSettings.AUTHORIZATION,
+  adapterService: new AdapterService(),
+});
+
+const pointsModel = new PointsModel({ apiService });
+
 const appState = new AppState();
 
 const keyboardManager = new KeyboardManager();
 
 appState.renderState = AppStates.IsLoading;
 
-pointsModel.init();
-
-appState.renderState = AppStates.IsReady;
+pointsModel.init().then(() => {
+  appState.renderState = AppStates.IsReady;
+});
 
 const pointService = new PointService({ pointsModel, appState });
 const filterSortService = new FilterSortService({ pointsModel, appState });

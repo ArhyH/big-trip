@@ -68,8 +68,8 @@ export default class PointService {
     };
 
     const updateCallbacks = {
-      onFormSubmit: () => {
-        this.#pointsModel.updatePoint(point);
+      onFormSubmit: async () => {
+        await this.#pointsModel.updatePoint(point);
         this.#appState.notifyPointsChanged();
         callbacks?.closeForm();
       },
@@ -94,8 +94,8 @@ export default class PointService {
   getPointCallbacks({ point, onEditClick }) {
     return {
       onEditClick,
-      onFavoriteClick: () => {
-        const updated = this.#pointsModel.toggleFavorite(point);
+      onFavoriteClick: async () => {
+        const updated = await this.#pointsModel.toggleFavorite(point);
         if (updated) {
           this.#appState.notifyPointsChanged(updated);
         }

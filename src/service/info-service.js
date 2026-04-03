@@ -1,7 +1,6 @@
 import { getDateInFormat } from '../common/date';
 import { FilterPredicates } from '../common/sort';
 import { TimeFormates } from '../common/time';
-import { getArrayFromMap } from '../common/utils';
 
 export default class InfoService {
   #pointsModel = null;
@@ -20,18 +19,21 @@ export default class InfoService {
   }
 
   getDestinations() {
-    const destinations = this.#filteredPoints.map((point) => point.destination);
+    const names = [
+      ...new Set(
+        this.#filteredPoints.map(
+          ({ destination }) =>
+            this.#pointsModel.getDestinationById(destination)?.name ??
+            'Unknown',
+        ),
+      ),
+    ];
 
-    const names = new Map(
-      destinations.map((id) => [
-        id,
-        this.#pointsModel.getDestinationById(id)?.name ?? 'Unknown',
-      ]),
-    );
+    if (names.length <= 3) {
+      return names.join(' &mdash; ');
+    }
 
-    const title = getArrayFromMap(names).join(' &mdash; ');
-
-    return title;
+    return `${names.at(0)} &mdash; ... &mdash; ${names.at(-1)}`;
   }
 
   getDates() {
