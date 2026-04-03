@@ -67,7 +67,7 @@ export default class FormView extends AbstractStatefulView {
 
     this.element
       .querySelector('#event-price-1')
-      .addEventListener('change', this.#changePriceHandler);
+      .addEventListener('input', this.#changePriceHandler);
 
     this.element
       .querySelector('.event__rollup-btn')
@@ -177,5 +177,29 @@ export default class FormView extends AbstractStatefulView {
     delete data.mode;
 
     return data;
+  }
+
+  #toggleFormState(disabled) {
+    this.element.style.pointerEvents = disabled ? 'none' : '';
+
+    this.element
+      .querySelectorAll('input, button, select')
+      .forEach((element) => {
+        element.disabled = disabled;
+      });
+  }
+
+  updateElementForSaving(isSaving) {
+    this.#toggleFormState(isSaving);
+    this.element.querySelector('.event__save-btn').textContent = isSaving
+      ? 'Saving...'
+      : 'Save';
+  }
+
+  updateElementForDeleting(isDeleting) {
+    this.#toggleFormState(isDeleting);
+    this.element.querySelector('.event__reset-btn').textContent = isDeleting
+      ? 'Deleting...'
+      : 'Delete';
   }
 }

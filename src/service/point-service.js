@@ -57,8 +57,11 @@ export default class PointService {
     };
 
     const createCallbacks = {
-      onFormSubmit: () => {
-        this.#pointsModel.addPoint(point);
+      onFormSubmit: async (formData) => {
+        getFormComponent().updateElementForSaving(true);
+        await this.#pointsModel.addPoint(formData.point);
+        getFormComponent().updateElementForSaving(false);
+
         this.#appState.notifyPointsChanged();
         callbacks?.closeForm();
       },
@@ -69,12 +72,18 @@ export default class PointService {
 
     const updateCallbacks = {
       onFormSubmit: async () => {
+        getFormComponent().updateElementForSaving(true);
         await this.#pointsModel.updatePoint(point);
+        getFormComponent().updateElementForSaving(false);
+
         this.#appState.notifyPointsChanged();
         callbacks?.closeForm();
       },
-      onFormDecline: (id) => {
-        this.#pointsModel.removePoint(id);
+      onFormDecline: async (id) => {
+        getFormComponent().updateElementForDeleting(true);
+        await this.#pointsModel.removePoint(id);
+        getFormComponent().updateElementForDeleting(false);
+
         this.#appState.notifyPointsChanged();
         this.#appState.currentOpenFormId = null;
         callbacks?.closeForm();
@@ -124,6 +133,7 @@ export default class PointService {
       destinations: this.#pointsModel.destinations,
       details: this.#pointsModel.getDestinationById(point.destination),
       mode: this.#getFormMode(point),
+      state: this.#appState.renderState,
     };
   }
 

@@ -8,7 +8,7 @@ import FilterSortService from './service/filter-sort-service';
 import InfoService from './service/info-service';
 import PointsApiService from './service/points-api-service';
 import AdapterService from './service/adapter-service';
-import { ApiSettings, AppStates } from './common/config';
+import { ApiSettings } from './common/config';
 
 const headerContentNode = document.querySelector('.trip-main');
 const eventsNode = document.querySelector('.trip-events');
@@ -19,17 +19,13 @@ const apiService = new PointsApiService({
   adapterService: new AdapterService(),
 });
 
-const pointsModel = new PointsModel({ apiService });
-
 const appState = new AppState();
+
+const pointsModel = new PointsModel({ apiService, appState });
 
 const keyboardManager = new KeyboardManager();
 
-appState.renderState = AppStates.IsLoading;
-
-pointsModel.init().then(() => {
-  appState.renderState = AppStates.IsReady;
-});
+pointsModel.init();
 
 const pointService = new PointService({ pointsModel, appState });
 const filterSortService = new FilterSortService({ pointsModel, appState });

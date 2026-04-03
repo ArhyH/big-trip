@@ -137,9 +137,14 @@ const getCTAButtons = (isUpdateMode) => {
       <span class="visually-hidden">Open event</span>
     </button>`;
 
+  const deleteButton =
+    '<button class="event__reset-btn" type="reset">Delete</button>';
+  const cancelButton =
+    '<button class="event__reset-btn" type="reset">Cancel</button>';
+
   return `
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-    <button class="event__reset-btn" type="reset">${isUpdateMode ? 'Delete' : 'Cancel'}</button>
+    ${isUpdateMode ? deleteButton : cancelButton}
     ${isUpdateMode ? closeButton : ''}`;
 };
 

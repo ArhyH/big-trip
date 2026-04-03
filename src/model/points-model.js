@@ -1,5 +1,6 @@
 import PointEntity from './point-entity';
 import { getArrayFromMap } from '../common/utils';
+import { AppStates } from '../common/config';
 
 export default class PointsModel {
   #destinationsIdByName = new Map();
@@ -8,15 +9,15 @@ export default class PointsModel {
   #points = new Map();
   #filterPredicate = () => true;
   #apiService = null;
+  #appState = null;
 
-  constructor({ apiService }) {
+  constructor({ apiService, appState }) {
     this.#apiService = apiService;
+    this.#appState = appState;
   }
 
-  async init() {
-    await this.#setDestinations();
-    await this.#setOffers();
-    await this.#setPoints();
+  init() {
+    this.#setData();
   }
 
   get points() {
@@ -69,14 +70,18 @@ export default class PointsModel {
     return this.#points.has(point.id);
   }
 
-  addPoint(point) {
+  async addPoint(point) {
     const entity =
       point instanceof PointEntity ? point : new PointEntity(point);
-    this.#points.set(entity.id, entity);
+
+    const response = await this.#apiService.addPoint(entity.data);
+    const newEntity = new PointEntity(response);
+    this.#points.set(newEntity.id, newEntity);
   }
 
-  removePoint(point) {
+  async removePoint(point) {
     if (this.#points.has(point.id)) {
+      await this.#apiService.removePoint(point);
       this.#points.delete(point.id);
     }
   }
@@ -89,13 +94,9 @@ export default class PointsModel {
       return;
     }
 
-    try {
-      const response = await this.#apiService.updatePoint(entity.data);
-      this.#points.set(entity.id, new PointEntity(response));
-    } catch (error) {
-      // prettier-ignore
-      throw new Error('Can\'t update point');
-    }
+    const response = await this.#apiService.updatePoint(entity.data);
+    const newEntity = new PointEntity(response);
+    this.#points.set(newEntity.id, newEntity);
   }
 
   async toggleFavorite(point) {
@@ -105,56 +106,50 @@ export default class PointsModel {
       return;
     }
 
-    try {
-      const updated = current.toggleFavorite();
-      const response = await this.#apiService.updatePoint(updated.data);
-      const entity = new PointEntity(response);
-      this.#points.set(point.id, entity);
-      return entity;
-    } catch (error) {
-      // prettier-ignore
-      throw new Error('Can\'t update point');
-    }
+    const updated = current.toggleFavorite();
+    const response = await this.#apiService.updatePoint(updated.data);
+    const entity = new PointEntity(response);
+    this.#points.set(entity.id, entity);
+    return entity;
   }
 
   async #setDestinations() {
-    try {
-      const destinations = await this.#apiService.destinations;
+    const destinations = await this.#apiService.destinations;
 
-      this.#destinationsIdByName = new Map(
-        destinations.map((destination) => [destination.name, destination.id]),
-      );
-      this.#destinationsById = new Map(
-        destinations.map((destination) => [destination.id, destination]),
-      );
-    } catch (error) {
-      this.#destinationsIdByName = new Map();
-      this.#destinationsById = new Map();
-    }
+    this.#destinationsIdByName = new Map(
+      destinations.map((destination) => [destination.name, destination.id]),
+    );
+    this.#destinationsById = new Map(
+      destinations.map((destination) => [destination.id, destination]),
+    );
   }
 
   async #setOffers() {
-    try {
-      const offers = await this.#apiService.offers;
+    const offers = await this.#apiService.offers;
 
-      this.#offers = new Map(offers.map((offer) => [offer.type, offer.offers]));
-    } catch (error) {
-      this.#offers = new Map();
-    }
+    this.#offers = new Map(offers.map((offer) => [offer.type, offer.offers]));
   }
 
   async #setPoints() {
-    try {
-      const points = await this.#apiService.points;
+    const points = await this.#apiService.points;
 
-      this.#points = new Map(
-        points.map((item) => {
-          const point = new PointEntity(item);
-          return [point.id, point];
-        }),
-      );
-    } catch (error) {
-      this.#points = new Map();
+    this.#points = new Map(
+      points.map((item) => {
+        const point = new PointEntity(item);
+        return [point.id, point];
+      }),
+    );
+  }
+
+  async #setData() {
+    try {
+      await this.#setDestinations();
+      await this.#setOffers();
+      await this.#setPoints();
+    } catch {
+      this.#appState.renderState = AppStates.IsError;
+      return;
     }
+    this.#appState.renderState = AppStates.IsReady;
   }
 }

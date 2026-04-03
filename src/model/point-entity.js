@@ -16,7 +16,7 @@ export default class PointEntity {
       ...data,
     };
 
-    this.#id = mergedData.id ?? new Date().toISOString();
+    this.#id = mergedData.id;
     this.#basePrice = mergedData.basePrice;
     this.#dateFrom = mergedData.dateFrom;
     this.#dateTo = mergedData.dateTo;

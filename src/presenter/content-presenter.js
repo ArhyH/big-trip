@@ -69,13 +69,19 @@ export default class ContentPresenter {
   #renderContent(points, state) {
     const { renderState } = state;
 
-    if (renderState !== AppStates.IsReady) {
+    if (
+      renderState === AppStates.IsLoading ||
+      renderState === AppStates.IsError
+    ) {
       const message = AppStateHints[renderState];
       this.#renderHint(message, this.#contentNode);
       return;
     }
 
-    if (points.length === 0) {
+    if (
+      points.length === 0 &&
+      this.#appState.renderState === AppStates.IsReady
+    ) {
       this.#renderEmptyListHint();
       return;
     }
@@ -119,9 +125,9 @@ export default class ContentPresenter {
     this.#pointComponents.set(point.id, pointPresenter);
   }
 
-  #updatePoint(pointId) {
+  async #updatePoint(pointId) {
     const pointPresenter = this.#pointComponents.get(pointId);
-    const updatedPoint = this.#pointsModel.getPointById(pointId);
+    const updatedPoint = await this.#pointsModel.getPointById(pointId);
 
     pointPresenter.init(updatedPoint);
   }
