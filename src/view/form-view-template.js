@@ -3,20 +3,21 @@ import { PointTypes } from '../common/point';
 import { TimeFormates } from '../common/time';
 import { getDateInFormat } from '../common/date';
 
-const getEventTypeTemplate = (pointType, type) => {
+const getEventTypeTemplate = (pointType, type, isDisabled) => {
   const isChecked = type === pointType ? 'checked' : '';
 
   return `
     <div class="event__type-item">
-      <input id="${pointType}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${pointType}" ${isChecked}>
+      <input id="${pointType}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${pointType}" ${isChecked} ${isDisabled ? 'disabled' : ''}>
       <label class="event__type-label  event__type-label--${pointType}" for="${pointType}">${pointType.charAt(0).toUpperCase() + pointType.slice(1)}</label>
     </div>`;
 };
 
-const getTypesBlockTemplate = ({ type }) => {
+const getTypesBlockTemplate = (point, isDisabled) => {
+  const { type } = point;
   const getPointTypes = () =>
     Object.values(PointTypes)
-      .map((pointType) => getEventTypeTemplate(pointType, type))
+      .map((pointType) => getEventTypeTemplate(pointType, type, isDisabled))
       .join('');
 
   return `
@@ -25,7 +26,7 @@ const getTypesBlockTemplate = ({ type }) => {
         <span class="visually-hidden">Choose event type</span>
         <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
       </label>
-      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox"  ${isDisabled ? 'disabled' : ''}>
 
       <div class="event__type-list">
         <fieldset class="event__type-group">
@@ -39,22 +40,28 @@ const getTypesBlockTemplate = ({ type }) => {
 const getDestinationTemplate = ({ name }) =>
   `<option value="${name}"></option>`;
 
-const getDestinationBlockTemplate = (point, destinations, details) => {
+const getDestinationBlockTemplate = (
+  point,
+  destinations,
+  details,
+  isDisabled,
+) => {
   const { type } = point;
   const { name = '' } = details;
+
   return `
     <div class="event__field-group  event__field-group--destination">
       <label class="event__label  event__type-output" for="event-destination-1">
         ${type}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1" required ${isDisabled ? 'disabled' : ''}>
       <datalist id="destination-list-1">
         ${destinations.map((destination) => getDestinationTemplate(destination)).join('')}
       </datalist>
     </div>`;
 };
 
-const getOfferTemplate = (offer, checkedOffers) => {
+const getOfferTemplate = (offer, checkedOffers, isDisabled) => {
   const { id, price, title } = offer;
   const isChecked = checkedOffers?.map((item) => item.id).includes(id)
     ? 'checked'
@@ -62,8 +69,8 @@ const getOfferTemplate = (offer, checkedOffers) => {
 
   return `
     <div class="event__offer-selector">
-      <input class="event__offer-checkbox visually-hidden" id="${id}" type="checkbox" name="${id}" ${isChecked}>
-      <label class="event__offer-label" for="${id}">
+      <input class="event__offer-checkbox visually-hidden" id="${id}" type="checkbox" name="${id}" ${isChecked}  ${isDisabled ? 'disabled' : ''}>
+      <label class="event__offer-label" for="${id}" ${isDisabled ? 'style="pointer-events: none"' : ''}>
         <span class="event__offer-title">${title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${price}</span>
@@ -72,14 +79,14 @@ const getOfferTemplate = (offer, checkedOffers) => {
   `;
 };
 
-const getOffersListTemplate = (offers, checkedOffers) => {
+const getOffersListTemplate = (offers, checkedOffers, isDisabled) => {
   if (offers.length > 0) {
     return `
       <section class="event__section  event__section--offers">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         <div class="event__available-offers">
-          ${offers.map((offer) => getOfferTemplate(offer, checkedOffers)).join('')}
+          ${offers.map((offer) => getOfferTemplate(offer, checkedOffers, isDisabled)).join('')}
         </div>
       </section>
     `;
@@ -111,39 +118,44 @@ const getDestinationInfoTemplate = ({ pictures, description }) => {
   `;
 };
 
-const getTimeTemplate = ({ dateFrom, dateTo }) => `
-  <div class="event__field-group  event__field-group--time">
-    <label class="visually-hidden" for="event-start-time-1">From</label>
-    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getDateInFormat(dateFrom, TimeFormates.FULL)}">
-    &mdash;
-    <label class="visually-hidden" for="event-end-time-1">To</label>
-    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getDateInFormat(dateTo, TimeFormates.FULL)}">
-  </div>
-`;
+const getTimeTemplate = (point, isDisabled) => {
+  const { dateFrom, dateTo } = point;
+  return `
+    <div class="event__field-group  event__field-group--time">
+      <label class="visually-hidden" for="event-start-time-1">From</label>
+      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getDateInFormat(dateFrom, TimeFormates.FULL)}"  ${isDisabled ? 'disabled' : ''}>
+      &mdash;
+      <label class="visually-hidden" for="event-end-time-1">To</label>
+      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getDateInFormat(dateTo, TimeFormates.FULL)}"  ${isDisabled ? 'disabled' : ''}>
+    </div>
+  `;
+};
 
-const getPriceTemplate = ({ basePrice }) => `
-  <div class="event__field-group  event__field-group--price">
-    <label class="event__label" for="event-price-1">
-      <span class="visually-hidden">Price</span>
-      &euro;
-    </label>
-    <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${basePrice}">
-  </div>
-`;
+const getPriceTemplate = (point, isDisabled) => {
+  const { basePrice } = point;
+  return `
+    <div class="event__field-group  event__field-group--price">
+      <label class="event__label" for="event-price-1">
+        <span class="visually-hidden">Price</span>
+        &euro;
+      </label>
+      <input class="event__input  event__input--price" required id="event-price-1" type="number" name="event-price" value="${basePrice}"  ${isDisabled ? 'disabled' : ''}>
+    </div>
+  `;
+};
 
-const getCTAButtons = (isUpdateMode) => {
+const getCTAButtons = (isUpdateMode, isDisabled, isSaving, isDeleting) => {
   const closeButton = `
     <button class="event__rollup-btn" type="button">
       <span class="visually-hidden">Open event</span>
     </button>`;
 
-  const deleteButton =
-    '<button class="event__reset-btn" type="reset">Delete</button>';
+  const deleteButton = `<button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>`;
   const cancelButton =
     '<button class="event__reset-btn" type="reset">Cancel</button>';
 
   return `
-    <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+    <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
     ${isUpdateMode ? deleteButton : cancelButton}
     ${isUpdateMode ? closeButton : ''}`;
 };
@@ -156,6 +168,9 @@ const getContentTemplate = (formData) => {
     details = {},
     destinations,
     mode,
+    isDisabled,
+    isSaving,
+    isDeleting,
   } = formData;
   const isUpdateMode = mode === FormModes.Update;
 
@@ -163,14 +178,14 @@ const getContentTemplate = (formData) => {
     <li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
         <header class="event__header">
-          ${getTypesBlockTemplate(point)}
-          ${getDestinationBlockTemplate(point, destinations, details)}
-          ${getTimeTemplate(point)}
-          ${getPriceTemplate(point)}
-          ${getCTAButtons(isUpdateMode)}
+          ${getTypesBlockTemplate(point, isDisabled)}
+          ${getDestinationBlockTemplate(point, destinations, details, isDisabled)}
+          ${getTimeTemplate(point, isDisabled)}
+          ${getPriceTemplate(point, isDisabled)}
+          ${getCTAButtons(isUpdateMode, isDisabled, isSaving, isDeleting)}
         </header>
         <section class="event__details">
-          ${getOffersListTemplate(offers, checkedOffers)}
+          ${getOffersListTemplate(offers, checkedOffers, isDisabled)}
           ${getDestinationInfoTemplate(details)}
         </section>
       </form>

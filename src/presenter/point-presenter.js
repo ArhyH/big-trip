@@ -103,4 +103,8 @@ export default class PointPresenter {
   resetView() {
     this.#closeForm();
   }
+
+  getPointComponent() {
+    return this.#pointComponent;
+  }
 }

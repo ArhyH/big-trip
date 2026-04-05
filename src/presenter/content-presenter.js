@@ -107,6 +107,7 @@ export default class ContentPresenter {
       container: this.#listElement,
       callbacks: this.#pointService.getPointCallbacks({
         point,
+        getPointComponent: () => pointPresenter.getPointComponent(),
         onEditClick: () => {
           if (this.#appState.currentOpenFormId) {
             this.#pointComponents

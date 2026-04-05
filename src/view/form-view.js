@@ -90,6 +90,10 @@ export default class FormView extends AbstractStatefulView {
     this.#flatpickrEnd = null;
   }
 
+  patchState(state) {
+    this._setState(state);
+  }
+
   #submitFormHandler = (evt) => {
     evt.preventDefault();
     this.#handleFormSubmit(this.#parseStateToData(this._state));
@@ -149,6 +153,8 @@ export default class FormView extends AbstractStatefulView {
     this.#flatpickrStart = flatpickr(
       this.element.querySelector('#event-start-time-1'),
       {
+        // prettier-ignore
+        'time_24hr': true,
         enableTime: true,
         dateFormat: 'd/m/y H:i',
         defaultDate: this._state.point.dateFrom,
@@ -159,6 +165,8 @@ export default class FormView extends AbstractStatefulView {
     this.#flatpickrEnd = flatpickr(
       this.element.querySelector('#event-end-time-1'),
       {
+        // prettier-ignore
+        'time_24hr': true,
         enableTime: true,
         dateFormat: 'd/m/y H:i',
         defaultDate: this._state.point.dateTo,
@@ -173,33 +181,6 @@ export default class FormView extends AbstractStatefulView {
   }
 
   #parseStateToData(state) {
-    const data = { ...state };
-    delete data.mode;
-
-    return data;
-  }
-
-  #toggleFormState(disabled) {
-    this.element.style.pointerEvents = disabled ? 'none' : '';
-
-    this.element
-      .querySelectorAll('input, button, select')
-      .forEach((element) => {
-        element.disabled = disabled;
-      });
-  }
-
-  updateElementForSaving(isSaving) {
-    this.#toggleFormState(isSaving);
-    this.element.querySelector('.event__save-btn').textContent = isSaving
-      ? 'Saving...'
-      : 'Save';
-  }
-
-  updateElementForDeleting(isDeleting) {
-    this.#toggleFormState(isDeleting);
-    this.element.querySelector('.event__reset-btn').textContent = isDeleting
-      ? 'Deleting...'
-      : 'Delete';
+    return { point: state.point };
   }
 }

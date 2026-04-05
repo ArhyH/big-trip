@@ -19,9 +19,6 @@ const UpdateTypes = {
 };
 
 const AppStates = {
-  IsLoading: 'IS_LOADING',
-  IsSaving: 'IS_SAVING',
-  IsDeleting: 'IS_DELETING',
   IsError: 'IS_ERROR',
   IsReady: 'IS_READY',
 };
@@ -36,6 +33,14 @@ const DateTypes = {
   dateTo: 'dateTo',
 };
 
+const EntityStates = {
+  isDisabled: 'IS_DISABLED',
+  isSaving: 'IS_SAVING',
+  isDeleting: 'IS_DELETING',
+  isShaking: 'IS_SHAKING',
+  isReady: 'IS_READY',
+};
+
 const ApiSettings = {
   AUTHORIZATION: 'Basic gq6e9j3erl7TY',
   URL: 'https://22.objects.htmlacademy.pro/big-trip',
@@ -48,5 +53,6 @@ export {
   AppStates,
   FormModes,
   DateTypes,
+  EntityStates,
   ApiSettings,
 };
