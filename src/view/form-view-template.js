@@ -70,7 +70,7 @@ const getOfferTemplate = (offer, checkedOffers, isDisabled) => {
   return `
     <div class="event__offer-selector">
       <input class="event__offer-checkbox visually-hidden" id="${id}" type="checkbox" name="${id}" ${isChecked}  ${isDisabled ? 'disabled' : ''}>
-      <label class="event__offer-label" for="${id}" ${isDisabled ? 'style="pointer-events: none"' : ''}>
+      <label class="event__offer-label" for="${id}">
         <span class="event__offer-title">${title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${price}</span>

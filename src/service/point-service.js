@@ -5,10 +5,12 @@ export default class PointService {
   #pointsModel = null;
   #appState = null;
   #formCallbacks = null;
+  #uiBlocker = null;
 
-  constructor({ pointsModel, appState }) {
+  constructor({ pointsModel, appState, uiBlocker }) {
     this.#pointsModel = pointsModel;
     this.#appState = appState;
+    this.#uiBlocker = uiBlocker;
   }
 
   getFormCallbacks({ point, getFormComponent, callbacks }) {
@@ -82,6 +84,7 @@ export default class PointService {
 
     const createCallbacks = {
       onFormSubmit: async (formData) => {
+        this.#uiBlocker.block();
         this.#setState(getFormComponent(), EntityStates.isSaving);
         try {
           await this.#pointsModel.addPoint(formData.point);
@@ -90,6 +93,8 @@ export default class PointService {
         } catch {
           this.#setState(getFormComponent(), EntityStates.isReady);
           getFormComponent().shake();
+        } finally {
+          this.#uiBlocker.unblock();
         }
       },
       onFormDecline: () => {
@@ -99,6 +104,7 @@ export default class PointService {
 
     const updateCallbacks = {
       onFormSubmit: async () => {
+        this.#uiBlocker.block();
         this.#setState(getFormComponent(), EntityStates.isSaving);
         try {
           await this.#pointsModel.updatePoint(point);
@@ -107,9 +113,12 @@ export default class PointService {
         } catch {
           this.#setState(getFormComponent(), EntityStates.isReady);
           getFormComponent().shake();
+        } finally {
+          this.#uiBlocker.unblock();
         }
       },
       onFormDecline: async (id) => {
+        this.#uiBlocker.block();
         this.#setState(getFormComponent(), EntityStates.isDeleting);
         try {
           await this.#pointsModel.removePoint(id);
@@ -119,6 +128,8 @@ export default class PointService {
         } catch {
           this.#setState(getFormComponent(), EntityStates.isReady);
           getFormComponent().shake();
+        } finally {
+          this.#uiBlocker.unblock();
         }
       },
       onFormClose: () => {

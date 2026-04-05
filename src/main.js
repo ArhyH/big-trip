@@ -9,6 +9,12 @@ import InfoService from './service/info-service';
 import PointsApiService from './service/points-api-service';
 import AdapterService from './service/adapter-service';
 import { ApiSettings } from './common/config';
+import UiBlocker from './framework/ui-blocker/ui-blocker';
+
+const TimeLimit = {
+  LOWER_LIMIT: 0,
+  UPPER_LIMIT: 1000,
+};
 
 const headerContentNode = document.querySelector('.trip-main');
 const eventsNode = document.querySelector('.trip-events');
@@ -19,6 +25,11 @@ const apiService = new PointsApiService({
   adapterService: new AdapterService(),
 });
 
+const uiBlocker = new UiBlocker({
+  lowerLimit: TimeLimit.LOWER_LIMIT,
+  upperLimit: TimeLimit.UPPER_LIMIT,
+});
+
 const appState = new AppState();
 
 const pointsModel = new PointsModel({ apiService, appState });
@@ -27,7 +38,7 @@ const keyboardManager = new KeyboardManager();
 
 pointsModel.init();
 
-const pointService = new PointService({ pointsModel, appState });
+const pointService = new PointService({ pointsModel, appState, uiBlocker });
 const filterSortService = new FilterSortService({ pointsModel, appState });
 const infoService = new InfoService({ pointsModel, appState });
 
