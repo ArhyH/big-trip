@@ -50,8 +50,8 @@ export default class FormView extends AbstractStatefulView {
 
   _restoreHandlers() {
     this.element
-      .querySelector('.event__save-btn')
-      .addEventListener('click', this.#submitFormHandler);
+      .querySelector('.event--edit')
+      .addEventListener('submit', this.#submitFormHandler);
 
     this.element
       .querySelector('.event__reset-btn')
@@ -131,12 +131,6 @@ export default class FormView extends AbstractStatefulView {
 
   #submitFormHandler = (evt) => {
     evt.preventDefault();
-    const form = this.element.querySelector('.event--edit');
-
-    if (!form.checkValidity()) {
-      form.reportValidity();
-      return;
-    }
 
     if (!this._state.point.dateFrom || !this._state.point.dateTo) {
       this.shake();
