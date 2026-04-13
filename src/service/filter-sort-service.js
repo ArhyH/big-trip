@@ -21,11 +21,13 @@ export default class FilterSortService {
   }
 
   generateSorts() {
-    return Object.entries(SortComparators).map(([sortType]) => ({
-      type: sortType,
-      isDisabled: this.#pointsModel.points.length < 2,
-      isChecked: sortType === this.#appState.currentSort,
-    }));
+    return Object.entries(SortComparators).map(
+      ([sortType, { isDisabled }]) => ({
+        type: sortType,
+        isDisabled: isDisabled || this.#pointsModel.points.length < 2,
+        isChecked: sortType === this.#appState.currentSort,
+      }),
+    );
   }
 
   getFilteredPoints(points, filterType) {
@@ -39,12 +41,8 @@ export default class FilterSortService {
   }
 
   getSortedPoints(points, sortType) {
-    const comparator = SortComparators[sortType];
+    const { comparator } = SortComparators[sortType];
 
-    if (!comparator) {
-      return points;
-    }
-
-    return [...points].sort(comparator);
+    return comparator ? [...points].sort(comparator) : points;
   }
 }

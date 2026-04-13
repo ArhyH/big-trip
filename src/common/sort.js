@@ -2,12 +2,27 @@ import dayjs from 'dayjs';
 import { FilterTypes, SortTypes } from './config';
 
 const SortComparators = {
-  [SortTypes.DAY]: null,
-  [SortTypes.EVENT]: null,
-  [SortTypes.TIME]: (a, b) =>
-    dayjs(b.dateTo).diff(b.dateFrom) - dayjs(a.dateTo).diff(a.dateFrom),
-  [SortTypes.PRICE]: (a, b) => b.basePrice - a.basePrice,
-  [SortTypes.OFFERS]: (a, b) => b.offers.length - a.offers.length,
+  [SortTypes.DAY]: {
+    comparator: null,
+    isDisabled: false,
+  },
+  [SortTypes.EVENT]: {
+    comparator: null,
+    isDisabled: true,
+  },
+  [SortTypes.TIME]: {
+    comparator: (a, b) =>
+      dayjs(b.dateTo).diff(b.dateFrom) - dayjs(a.dateTo).diff(a.dateFrom),
+    isDisabled: false,
+  },
+  [SortTypes.PRICE]: {
+    comparator: (a, b) => b.basePrice - a.basePrice,
+    isDisabled: false,
+  },
+  [SortTypes.OFFERS]: {
+    comparator: (a, b) => b.offers.length - a.offers.length,
+    isDisabled: false,
+  },
 };
 
 const FilterPredicates = {

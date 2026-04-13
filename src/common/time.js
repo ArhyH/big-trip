@@ -5,8 +5,8 @@ const TIME = {
 };
 
 const TimeFormates = {
-  MD: 'MMM DD',
-  DM: 'DD MMM',
+  MD: 'MMM D',
+  DM: 'D MMM',
   H: 'HH:mm',
   FULL: 'DD/MM/YY HH:mm',
 };

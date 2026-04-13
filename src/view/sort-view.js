@@ -40,7 +40,7 @@ export default class SortView extends AbstractView {
   }
 
   #sortClickHandler = (evt) => {
-    if (evt.target.tagName === 'LABEL') {
+    if (evt.target.tagName === 'LABEL' && !evt.target.control.disabled) {
       evt.preventDefault();
       this.#handleSortTypeChange(evt.target.dataset.sortType);
     }
